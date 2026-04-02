@@ -13,3 +13,6 @@ Voor mijn idee voor de opdracht wilde ik iets gaan doen met de pokémon APIm, oo
 
 #### Checkout met Dylan
 Ik heb mijn checkout met Dylan online gedaan, omdat ik wat eerder naar huis ging vanwege mijn verkoudheid. Ik kon Dylan nog even helpen met het setuppen van Astro en heb mijn idee uitgelegd wat ik tot nu toe had. Zelf had hij op dat moment nog geen idee voor zijn opdracht.
+
+### Weekverslag
+Deze week zijn we begonnen met het API project. Deze week was een beetje kort, hierdoor is er niet heel veel gebeurt. Ik heb deze week een workshop over Astro gevolgd om dat een beetje te leren kennen. Tijdens de workshop waren er een paar problemen, maar die kreeg ik na die tijd opgelost. Ook heb ik een beetje onderzoek gedaan naar verschillende Content en Web API's. Ik ben uitgekomen dat ik iets wil doen met de Pokémon API, omdat dat me veel motivatie geeft. Verder wil ik iets doen met de GamePad en Canvas API's. Gewoon om het zo gamy mogelijk te maken. Als eerste idee had ik dat je een team kon samenstellen en dan met dat een beetje kon spelen / rondlopen op het canvas. Maar dat was nog een beetje simpel. Cyd en Jad hadden geholpen met een ander idee en dat was iets doen met AR. Ik zie nog niet helemaal voor me hoe ik dat ga doen, maar dan komt dan later nog wel. Ik wil wel nog steeeds iets doen met die GamePad API.
