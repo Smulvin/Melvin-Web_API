@@ -16,3 +16,10 @@ Ik heb mijn checkout met Dylan online gedaan, omdat ik wat eerder naar huis ging
 
 ### Weekverslag
 Deze week zijn we begonnen met het API project. Deze week was een beetje kort, hierdoor is er niet heel veel gebeurt. Ik heb deze week een workshop over Astro gevolgd om dat een beetje te leren kennen. Tijdens de workshop waren er een paar problemen, maar die kreeg ik na die tijd opgelost. Ook heb ik een beetje onderzoek gedaan naar verschillende Content en Web API's. Ik ben uitgekomen dat ik iets wil doen met de Pokémon API, omdat dat me veel motivatie geeft. Verder wil ik iets doen met de GamePad en Canvas API's. Gewoon om het zo gamy mogelijk te maken. Als eerste idee had ik dat je een team kon samenstellen en dan met dat een beetje kon spelen / rondlopen op het canvas. Maar dat was nog een beetje simpel. Cyd en Jad hadden geholpen met een ander idee en dat was iets doen met AR. Ik zie nog niet helemaal voor me hoe ik dat ga doen, maar dan komt dan later nog wel. Ik wil wel nog steeeds iets doen met die GamePad API.
+
+### Voortgangsgesprek
+Ik had mijn idee gepitched over dat ik iets met AR wilde gaan proberen. Iedereen vond dit eigenlijk wel een heel leuk idee, zelf heb ik dat uiteraard ook. Het gaat alleen wel echt een uitdaging worden om het werken te krijgen. Cyd had ook nog gezegd dat als de AR web API al zou werken, ik misschien niet eens een tweede web API nodig heb. Maar zelf denk ik dat het er vanzelf wel meer worden in de vorm van bijvoorbeeld localstorage of iets dergelijks. Cyd wil in ieder geval een Mewtwo op de ene schouder en een Squirtle op de andere.
+
+### Bekeken bronnen van deze week
+https://ar-js-org.github.io/AR.js-Docs/<br>
+https://stackblitz.com/edit/pokemon-api?file=index.js<br>
