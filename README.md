@@ -23,3 +23,5 @@ Ik had mijn idee gepitched over dat ik iets met AR wilde gaan proberen. Iedereen
 ### Bekeken bronnen van deze week
 https://ar-js-org.github.io/AR.js-Docs/<br>
 https://stackblitz.com/edit/pokemon-api?file=index.js<br>
+https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API<br>
+
