@@ -65,4 +65,7 @@ Prompt: Could you give me different styling for each typing? So that the backgro
 .type-fairy { background: #D685AD; color: #fff; }
 ```
 
+#### Checkout met Mats en Choice
+Vandaag hadden we met zijn 3en de checkout gedaan omdat we allemaal geen partner hadden. Er is deze keer niet veel gebeurt. We hebben gewoon onze ideeën aan elkaar verteld, maar er is zijn niet veel nieuwe dingen uit ontstaan.
+
 
