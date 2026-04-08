@@ -1,0 +1,38 @@
+---
+// @ts-nocheck
+import Card from "../components/Card.astro";
+
+import OverviewLayout from "../layouts/OverviewLayout.astro";
+
+// Fetch first 151 Pokémon
+const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151"); //809 voor tot melmetal
+const data = await res.json();
+const pokemonList = data.results;
+---
+
+<OverviewLayout>
+  <h1>Pokémon Overview</h1>
+
+  <div class="overview-grid">
+    {pokemonList.map((pokemon) => <Card pokemonName={pokemon.name} />)}
+  </div>
+</OverviewLayout>
+
+<style>
+  body {
+    background: #2f2a2a;
+  }
+
+  h1 {
+    text-align: center;
+    color: white;
+    font-family: "Jost", sans-serif;
+    margin: 2rem 0;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+</style>

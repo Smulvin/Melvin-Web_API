@@ -25,3 +25,44 @@ https://ar-js-org.github.io/AR.js-Docs/<br>
 https://stackblitz.com/edit/pokemon-api?file=index.js<br>
 https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API<br>
 
+## Week 2
+### Dag 2: Woensdag 8 - 4 - 2026
+Beginnen met workshop
+Begin gemaakt aan de overview pagina
+
+Vandaag begonnen we met het echt maken van de website. Beginnend met een workshop over Astro. Deze was wel heel handig, heel veel informatie daaruit kon ik daarna namelijk gebruiken voor mijn eigen website. Ik ben vandaag namelijk begonnen met het setuppen van mijn overview pagina. Dit kreeg ik redelijk snel aan de praat. Met de styling ben ik ook al een flink uit gekomen, het is soms alleen nog een beetje onoverzichtelijk in de opbouw van mijn code. Ik had dus ook Jad nog even gevraagd of hij er nog even naar kon kijken. Nu is mijn opbouw in ieder geval goed en kan ik dat aanhouden voor de rest van mijn website. Voor de typings van de pokémon wilde ik de kleuren van de typing gebruiken zoals ze in pokemon zijn. Dit heb ik aan ChatGPT gevraagd. De code die daaruit kwam staat hieronder. Dit was voornamelijk voor de verschillende kleuren, die heb ik later opgeslagen in mijn :root zodat ik ze voor andere styling op de detailpagina ook meteen kan gebruiken.
+
+#### ChatGPT code
+Prompt: Could you give me different styling for each typing? So that the background color is different?
+```
+<div class="types">
+  {pokemon.types.map((typeObj) => (
+    <span class={`type type-${typeObj.type.name}`}>
+      {typeObj.type.name}
+    </span>
+  ))}
+</div>
+```
+```
+/* Type-based colors */
+.type-normal { background: #A8A77A; color: #fff; }
+.type-fire { background: #EE8130; color: #fff; }
+.type-water { background: #6390F0; color: #fff; }
+.type-electric { background: #F7D02C; color: #333; }
+.type-grass { background: #7AC74C; color: #333; }
+.type-ice { background: #96D9D6; color: #333; }
+.type-fighting { background: #C22E28; color: #fff; }
+.type-poison { background: #A33EA1; color: #fff; }
+.type-ground { background: #E2BF65; color: #333; }
+.type-flying { background: #A98FF3; color: #fff; }
+.type-psychic { background: #F95587; color: #fff; }
+.type-bug { background: #A6B91A; color: #333; }
+.type-rock { background: #B6A136; color: #fff; }
+.type-ghost { background: #735797; color: #fff; }
+.type-dragon { background: #6F35FC; color: #fff; }
+.type-dark { background: #705746; color: #fff; }
+.type-steel { background: #B7B7CE; color: #333; }
+.type-fairy { background: #D685AD; color: #fff; }
+```
+
+
