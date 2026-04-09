@@ -1,3 +1,11 @@
+/* Source: https://fonts.google.com/specimen/Jost */
+@font-face {
+    font-family: "Jost";
+    src:url("Assets/fonts/Jost-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --color-normal: #A8A77A;
     --color-fire: #EE8130;
@@ -17,9 +25,12 @@
     --color-dark: #705746;
     --color-steel: #B7B7CE;
     --color-fairy: #D685AD;
-
+    
+    --color-background: #2f2a2a;
     --color-pokeball: #FF0000;
     --color-pokeball-bottom: #FFFFFF;
+
+    --font-jost: "Jost", sans-serif;
 }
 
 * {
@@ -27,3 +38,42 @@
     margin: 0;
     padding: 0;
 }
+
+.types {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    color: black;
+    list-style: none;
+}
+
+.type {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 999px;
+    background: #e5e7eb;
+    text-transform: capitalize;
+}
+
+/* Gegenereerd door ChatGPT, kleuren heb ik later zelf via de root gedaan. 
+Prompt: Could you give me different styling for each typing? So that the background color is different? */
+/* Type-based colors */
+.type-normal { background: var(--color-normal); color: #fff; }
+.type-fire { background: var(--color-fire); color: #fff; }
+.type-water { background: var(--color-water); color: #fff; }
+.type-electric { background: var(--color-electric); color: #333; }
+.type-grass { background: var(--color-grass); color: #333; }
+.type-ice { background: var(--color-ice); color: #333; }
+.type-fighting { background: var(--color-fighting); color: #fff; }
+.type-poison { background: var(--color-poison); color: #fff; }
+.type-ground { background: var(--color-ground); color: #333; }
+.type-flying { background: var(--color-flying); color: #fff; }
+.type-psychic { background: var(--color-psychic); color: #fff; }
+.type-bug { background: var(--color-bug); color: #333; }
+.type-rock { background: var(--color-rock); color: #fff; }
+.type-ghost { background: var(--color-ghost); color: #fff; }
+.type-dragon { background: var(--color-dragon); color: #fff; }
+.type-dark { background: var(--color-dark); color: #fff; }
+.type-steel { background: var(--color-steel); color: #333; }
+.type-fairy { background: var(--color-fairy); color: #fff; }

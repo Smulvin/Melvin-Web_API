@@ -1,26 +1,30 @@
 ---
 // @ts-nocheck
+
 import Card from "../components/Card.astro";
 
-import OverviewLayout from "../layouts/OverviewLayout.astro";
+import DefaultLayout from "../layouts/DefaultLayout.astro";
 
 // Fetch first 151 Pokémon
-const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151"); //809 voor tot melmetal
+import {POKEMON_URL} from "./shared.js"
+const res = await fetch(POKEMON_URL);
 const data = await res.json();
 const pokemonList = data.results;
 ---
 
-<OverviewLayout>
+<DefaultLayout title="Pokémon Overview">
   <h1>Pokémon Overview</h1>
 
   <div class="overview-grid">
     {pokemonList.map((pokemon) => <Card pokemonName={pokemon.name} />)}
   </div>
-</OverviewLayout>
+</DefaultLayout>
+
+
 
 <style>
   body {
-    background: #2f2a2a;
+    background: var(--color-background);
   }
 
   h1 {

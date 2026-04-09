@@ -1,0 +1,133 @@
+---
+// @ts-nocheck
+import DefaultLayout from "../../layouts/DefaultLayout.astro";
+import {POKEMON_URL} from "./../shared.js"
+
+export async function getStaticPaths() {
+  
+  const res = await fetch(POKEMON_URL); 
+  const data = await res.json();
+
+  return data.results.map((pokemon) => ({
+    params: { name: pokemon.name }
+  }));
+}
+
+const { name } = Astro.params;
+
+// Fetch Pokémon
+const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+const pokemon = await res.json();
+
+// Fetch evolution chain
+const species = await fetch(pokemon.species.url).then(r => r.json());
+const evoData = await fetch(species.evolution_chain.url).then(r => r.json());
+
+// Simple evolution extractor
+function getEvolutions(chain) {
+  const result = [];
+  let current = chain;
+
+  while (current) {
+    result.push(current.species.name);
+    current = current.evolves_to[0];
+  }
+
+  return result;
+}
+
+const evolutions = getEvolutions(evoData.chain);
+---
+
+<DefaultLayout title={pokemon.name}>
+<div class="pokemon-info">
+  <div class="basic-info">
+    <!-- Pokemon Name -->
+    <h1>{pokemon.name}</h1>
+
+    <!-- Pokemon Dex number -->
+    <p>#{pokemon.id}</p>
+
+    <!-- Sprite -->
+    <img src={pokemon.sprites.other['official-artwork'].front_default } alt={pokemon.name} />
+
+    <!-- Height and Weight -->
+    <p class="height">Height: {pokemon.height / 10} m</p>
+    <p class="weight">Weight: {pokemon.weight / 10} kg</p>
+
+    <!-- Types -->
+    <ul class="types">
+      {pokemon.types?.map((t) => (
+        <li class={`type type-${t.type.name}`}>
+          {t.type.name}
+        </li>
+      ))}
+    </ul>
+
+  </div>
+
+<div class="cry-evolution">
+  <!-- Cry -->
+  <button onclick={`new Audio('${pokemon.cries?.latest}').play()`}>Play Cry</button>
+
+  <!-- Evolution -->
+   
+  <p>{evolutions.join(" → ")}</p>
+</div>
+  
+  
+  <!-- Moves -->
+  <h2>Moves</h2>
+  <ul>
+    {pokemon.moves?.slice(0, 20).map((m) => (
+      <li>{m.move.name}</li>
+    ))}
+  </ul>
+</div>
+</DefaultLayout>
+
+<style>
+  body {
+    background: var(--color-background);
+    font-family: var(--font-jost);
+  }
+
+  .pokemon-info {
+    max-width: 75%;
+    margin: 0 auto;
+  }
+
+  .basic-info {
+    display: grid;
+    grid-template-columns: 50% 1fr 1fr;
+    grid-tempalte-rows: repeat(3, 1fr);
+    gap: 1rem;
+    align-items: center;
+    color: white;
+
+    h1 {
+      grid-column: 2 / 3;
+      grid-row: 0 / 1;
+      text-transform: capitalize;
+      font-size: 5rem;
+    }
+
+    img {
+      width: 100%;
+      grid-column: 1 / 2;
+      grid-row: 1 / 4;
+    }
+
+    ul {
+      grid-column: 2 / 4;
+    }
+
+  }
+
+  .cry-evolution {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+  }
+</style>

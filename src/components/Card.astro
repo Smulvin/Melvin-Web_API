@@ -13,36 +13,34 @@ try {
 ---
 
 {pokemon && (
-  <div class="card">
-    
-    <img
-      src={pokemon.sprites.other['official-artwork'].front_default}
-      alt={pokemon.name}
-      class="image"
-    />
+  <a href={`/pokemon/${pokemon.name}`} class="card-link">
+    <div class="card">
+      
+      <img
+        src={pokemon.sprites.other['official-artwork'].front_default}
+        alt={pokemon.name}
+        class="image"
+      />
 
 
-    <h2 class="title">
-      {pokemon.name}
-    </h2>
+      <h2 class="title">
+        {pokemon.name}
+      </h2>
 
-    <div class="types">
-      {pokemon.types.map((typeObj) => (
-        <span class={`type type-${typeObj.type.name}`}>
-          {typeObj.type.name}
-        </span>
-      ))}
+      <div class="types">
+        {pokemon.types.map((typeObj) => (
+          <span class={`type type-${typeObj.type.name}`}>
+            {typeObj.type.name}
+          </span>
+        ))}
+      </div>
     </div>
-  </div>
+  </a>
 )}
 
 <style>
-  /* Source: https://fonts.google.com/specimen/Jost */
-  @font-face {
-    font-family: "Jost";
-    src:url("Assets/fonts/Jost-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
+  .card-link {
+    text-decoration: none;
   }
 
   .card {
@@ -51,7 +49,7 @@ try {
     box-shadow: 0 5px 15px #0000001a;
     padding: 1rem;
     transition: 0.5s;
-    font-family: "Jost", sans-serif;
+    font-family: var(--font-jost);
     color: white;
     background: rgb(54, 54, 54);
   }
@@ -76,41 +74,5 @@ try {
     font-size: 1.25rem;
   }
 
-  .types {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    color: black;
-  }
 
-  .type {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 999px;
-    background: #e5e7eb;
-    text-transform: capitalize;
-  }
-
-  /* Gegenereerd door ChatGPT, kleuren heb ik later zelf via de root gedaan. 
-  Prompt: Could you give me different styling for each typing? So that the background color is different? */
-  /* Type-based colors */
-  .type-normal { background: var(--color-normal); color: #fff; }
-  .type-fire { background: var(--color-fire); color: #fff; }
-  .type-water { background: var(--color-water); color: #fff; }
-  .type-electric { background: var(--color-electric); color: #333; }
-  .type-grass { background: var(--color-grass); color: #333; }
-  .type-ice { background: var(--color-ice); color: #333; }
-  .type-fighting { background: var(--color-fighting); color: #fff; }
-  .type-poison { background: var(--color-poison); color: #fff; }
-  .type-ground { background: var(--color-ground); color: #333; }
-  .type-flying { background: var(--color-flying); color: #fff; }
-  .type-psychic { background: var(--color-psychic); color: #fff; }
-  .type-bug { background: var(--color-bug); color: #333; }
-  .type-rock { background: var(--color-rock); color: #fff; }
-  .type-ghost { background: var(--color-ghost); color: #fff; }
-  .type-dragon { background: var(--color-dragon); color: #fff; }
-  .type-dark { background: var(--color-dark); color: #fff; }
-  .type-steel { background: var(--color-steel); color: #333; }
-  .type-fairy { background: var(--color-fairy); color: #fff; }
 </style>
