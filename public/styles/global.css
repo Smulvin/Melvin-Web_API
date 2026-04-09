@@ -25,8 +25,16 @@
     --color-dark: #705746;
     --color-steel: #B7B7CE;
     --color-fairy: #D685AD;
-    
+
+    --color-move-physical-bg: #f75231;
+    --color-move-physical-text: #ffc631;
+    --color-move-special-bg: #5273ad;
+    --color-move-special-text: #c6deff;
+    --color-move-status-bg: #ada594;
+    --color-move-status-text: #ffffff;
+
     --color-background: #2f2a2a;
+    --color-accent: #363636;
     --color-pokeball: #FF0000;
     --color-pokeball-bottom: #FFFFFF;
 
@@ -49,7 +57,7 @@
 }
 
 .type {
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     border-radius: 999px;
     background: #e5e7eb;
@@ -77,3 +85,7 @@ Prompt: Could you give me different styling for each typing? So that the backgro
 .type-dark { background: var(--color-dark); color: #fff; }
 .type-steel { background: var(--color-steel); color: #333; }
 .type-fairy { background: var(--color-fairy); color: #fff; }
+
+.move-physical { background: var(--color-move-physical-bg); color: var(--color-move-physical-text); }
+.move-special { background: var(--color-move-special-bg); color: var(--color-move-special-text); }
+.move-status { background: var(--color-move-status-bg); color: var(--color-move-status-text); }

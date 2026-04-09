@@ -1,89 +1,186 @@
 ---
 // @ts-nocheck
 import DefaultLayout from "../../layouts/DefaultLayout.astro";
-import {POKEMON_URL} from "./../shared.js"
+import { POKEMON_URL } from "../shared.js";
 
+// Static paths
 export async function getStaticPaths() {
-  
-  const res = await fetch(POKEMON_URL); 
+  const res = await fetch(POKEMON_URL);
   const data = await res.json();
 
   return data.results.map((pokemon) => ({
-    params: { name: pokemon.name }
+    params: { name: pokemon.name },
   }));
 }
 
+// Main Pokémon
 const { name } = Astro.params;
-
-// Fetch Pokémon
 const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
 const pokemon = await res.json();
 
-// Fetch evolution chain
-const species = await fetch(pokemon.species.url).then(r => r.json());
-const evoData = await fetch(species.evolution_chain.url).then(r => r.json());
+// Allowed Pokémon
+const allowedRes = await fetch(POKEMON_URL);
+const allowedData = await allowedRes.json();
+const allowedNames = allowedData.results.map((p) => p.name);
 
-// Simple evolution extractor
-function getEvolutions(chain) {
+// Evolution chain
+const species = await fetch(pokemon.species.url).then((r) => r.json());
+const evoData = await fetch(species.evolution_chain.url).then((r) => r.json());
+
+// Extract evolutions (only allowed Pokémon)
+function extractEvolutions(chain) {
   const result = [];
-  let current = chain;
-
-  while (current) {
-    result.push(current.species.name);
-    current = current.evolves_to[0];
+  function traverse(node) {
+    if (!node) return;
+    const name = node.species.name;
+    if (allowedNames.includes(name)) {
+      const urlParts = node.species.url.split("/").filter(Boolean);
+      const id = urlParts[urlParts.length - 1];
+      result.push({
+        name,
+        id,
+        sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+      });
+    }
+    node.evolves_to.forEach(traverse);
   }
-
+  traverse(chain);
   return result;
 }
+const evolutionData = extractEvolutions(evoData.chain);
 
-const evolutions = getEvolutions(evoData.chain);
+// Fetch detailed info for moves
+async function getMoveDetails(move) {
+  const moveRes = await fetch(move.move.url);
+  const moveData = await moveRes.json();
+  return {
+    name: moveData.name,
+    type: moveData.type.name,
+    power: moveData.power,
+    class: moveData.damage_class.name,
+  };
+}
+
+// Level-up moves
+const levelUpMoves = await Promise.all(
+  pokemon.moves
+    .filter((m) =>
+      m.version_group_details.some(
+        (v) => v.move_learn_method.name === "level-up",
+      ),
+    )
+    .slice(0, 20) // optional limit
+    .map(getMoveDetails),
+);
+
+// TM/HM moves
+const machineMoves = await Promise.all(
+  pokemon.moves
+    .filter((m) =>
+      m.version_group_details.some(
+        (v) => v.move_learn_method.name === "machine",
+      ),
+    )
+    .map(getMoveDetails),
+);
 ---
 
 <DefaultLayout title={pokemon.name}>
-<div class="pokemon-info">
-  <div class="basic-info">
-    <!-- Pokemon Name -->
-    <h1>{pokemon.name}</h1>
+  <div class="pokemon-info">
+    <div class="basic-info">
+      <h1>{pokemon.name}</h1>
+      <p>#{pokemon.id}</p>
+      <img src={pokemon.sprites.other['official-artwork'].front_default} alt={pokemon.name} />
+      <p class="height">Height: {pokemon.height / 10} m</p>
+      <p class="weight">Weight: {pokemon.weight / 10} kg</p>
 
-    <!-- Pokemon Dex number -->
-    <p>#{pokemon.id}</p>
+      <ul class="types">
+        {
+          pokemon.types?.map((t) => (
+            <li class={`type type-${t.type.name}`}>{t.type.name}</li>
+          ))
+        }
+      </ul>
+    </div>
 
-    <!-- Sprite -->
-    <img src={pokemon.sprites.other['official-artwork'].front_default } alt={pokemon.name} />
+    <div class="cry-evolution">
+      <button onclick={`new Audio('${pokemon.cries?.latest}').play()`}
+        >Play Cry</button
+      >
 
-    <!-- Height and Weight -->
-    <p class="height">Height: {pokemon.height / 10} m</p>
-    <p class="weight">Weight: {pokemon.weight / 10} kg</p>
-
-    <!-- Types -->
-    <ul class="types">
-      {pokemon.types?.map((t) => (
-        <li class={`type type-${t.type.name}`}>
-          {t.type.name}
-        </li>
-      ))}
-    </ul>
-
+      <div class="evolution-chain">
+        {
+          evolutionData.map((evo) => (
+            <a href={`/pokemon/${evo.name}`} class="evo">
+              <img src={evo.sprite} alt={evo.name} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    <div class="moves">
+      <!-- Level-up Moves Table -->
+      <div>
+        <h2>Level-Up Moves</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Move</th>
+              <th>Type</th>
+              <th>Power</th>
+              <th>Class</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              levelUpMoves.map((move) => (
+                <tr>
+                  <td>{move.name}</td>
+                  <td>
+                    <span class={`type-${move.type}`}>{move.type}</span>
+                  </td>
+                  <td>{move.power ?? "-"}</td>
+                  <td>
+                    <span class={`move-${move.class}`}>{move.class}</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <!-- TM/HM Moves Table -->
+        <h2>TM/HM Moves</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Move</th>
+              <th>Type</th>
+              <th>Power</th>
+              <th>Class</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              machineMoves.map((move) => (
+                <tr>
+                  <td>{move.name}</td>
+                  <td>
+                    <span class={`type-${move.type}`}>{move.type}</span>
+                  </td>
+                  <td>{move.power ?? "-"}</td>
+                  <td>
+                    <span class={`move-${move.class}`}>{move.class}</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-
-<div class="cry-evolution">
-  <!-- Cry -->
-  <button onclick={`new Audio('${pokemon.cries?.latest}').play()`}>Play Cry</button>
-
-  <!-- Evolution -->
-   
-  <p>{evolutions.join(" → ")}</p>
-</div>
-  
-  
-  <!-- Moves -->
-  <h2>Moves</h2>
-  <ul>
-    {pokemon.moves?.slice(0, 20).map((m) => (
-      <li>{m.move.name}</li>
-    ))}
-  </ul>
-</div>
 </DefaultLayout>
 
 <style>
@@ -95,12 +192,13 @@ const evolutions = getEvolutions(evoData.chain);
   .pokemon-info {
     max-width: 75%;
     margin: 0 auto;
+    padding: 5rem;
   }
 
   .basic-info {
     display: grid;
-    grid-template-columns: 50% 1fr 1fr;
-    grid-tempalte-rows: repeat(3, 1fr);
+    grid-template-columns: 40% 1fr 1fr;
+    grid-template-rows: repeat(3, 5rem);
     gap: 1rem;
     align-items: center;
     color: white;
@@ -112,22 +210,79 @@ const evolutions = getEvolutions(evoData.chain);
       font-size: 5rem;
     }
 
+    p:first-of-type {
+      font-size: 2rem;
+    }
+
     img {
-      width: 100%;
+      height: 100%;
       grid-column: 1 / 2;
       grid-row: 1 / 4;
     }
 
-    ul {
-      grid-column: 2 / 4;
+    p:not(:first-of-type) {
+      font-size: 2rem;
     }
 
+    ul {
+      grid-column: 2 / 4;
+
+      li {
+        font-size: 2rem;
+      }
+    }
   }
 
   .cry-evolution {
-    display: flex;
+    display: grid;
+    grid-template-columns: 40% 1fr;
     justify-content: space-between;
     width: 100%;
+    margin: 2rem 0;
+    color: white;
 
+    button {
+      border-radius: 50%;
+      aspect-ratio: 1;
+      width: 5rem;
+      background: var(--color-accent);
+    }
+  }
+
+  .moves {
+    h2 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    table {
+      background: var(--color-background);
+      color: white;
+      text-transform: capitalize;
+
+      td:not(:has(span)) {
+        padding: 0.5rem 0.25rem;
+      }
+
+      td {
+        border: 2px solid var(--color-background);
+        background: var(--color-accent);
+
+        span {
+          min-width: 4rem;
+          min-height: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      
+      
+
+    }
   }
 </style>
