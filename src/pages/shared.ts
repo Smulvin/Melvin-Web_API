@@ -1,4 +1,4 @@
-export const POKEMON_URL = "https://pokeapi.co/api/v2/pokemon?limit=898" 
+export const POKEMON_URL = "https://pokeapi.co/api/v2/pokemon?limit=151" 
 //Gen 1: 151
 //Gen 2: 251
 //Gen 3: 386

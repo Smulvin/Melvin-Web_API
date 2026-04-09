@@ -32,6 +32,8 @@ Begin gemaakt aan de overview pagina
 
 Vandaag begonnen we met het echt maken van de website. Beginnend met een workshop over Astro. Deze was wel heel handig, heel veel informatie daaruit kon ik daarna namelijk gebruiken voor mijn eigen website. Ik ben vandaag namelijk begonnen met het setuppen van mijn overview pagina. Dit kreeg ik redelijk snel aan de praat. Met de styling ben ik ook al een flink uit gekomen, het is soms alleen nog een beetje onoverzichtelijk in de opbouw van mijn code. Ik had dus ook Jad nog even gevraagd of hij er nog even naar kon kijken. Nu is mijn opbouw in ieder geval goed en kan ik dat aanhouden voor de rest van mijn website. Voor de typings van de pokémon wilde ik de kleuren van de typing gebruiken zoals ze in pokemon zijn. Dit heb ik aan ChatGPT gevraagd. De code die daaruit kwam staat hieronder. Dit was voornamelijk voor de verschillende kleuren, die heb ik later opgeslagen in mijn :root zodat ik ze voor andere styling op de detailpagina ook meteen kan gebruiken.
 
+<img src="Assets/README_imgs/Dag2_OverviewPagina.png" alt="Pagina van een overview van verschillende pokemon">
+
 #### ChatGPT code
 Prompt: Could you give me different styling for each typing? So that the background color is different?
 ```
@@ -72,4 +74,10 @@ https://fonts.google.com/specimen/Jost
 Vandaag hadden we met zijn 3en de checkout gedaan omdat we allemaal geen partner hadden. Er is deze keer niet veel gebeurt. We hebben gewoon onze ideeën aan elkaar verteld, maar er is zijn niet veel nieuwe dingen uit ontstaan.
 
 
+### Dag 3: Donderdag 9 - 4 - 2026
+Vandaag ben ik voornamelijk bezig geweest met de detailpagina. Het was een beetje gedoe om de juiste informatie uit de API te halen, later had ik ook nog extra data eruit te halen van welke TM en HM Pokémon kunnen leren, want ik had nog ruimte over op mijn pagina. Ook heb ik vandaag extra focus proberen te leggen op het DRY maken van mijn code. Zo had ik namelijk 2 verschillende layouts die hetzelfde waren. Maar ik probeerde er ook op te letten dat ik niet in CSS te veel mezelf aan het herhalen was door onderdelen in de global.css te zetten. Ik heb nog wel ideeën voor op mijn detailpagina, zoals knoppen links en rechtsboven om naar de volgende en vorige in de pokedex te gaan. Maar voor volgende keer lijkt het me handiger om te gaan beginnen aan de eisen die echt moeten voor de opdracht, zoals het gebruik van verschillende content API's. Dylan had vandaag ook nog geholpen met dat ik de API maar op 1 locatie ophaal, dat is namelijk ook weer voor DRY, maar ook dat het makkelijker aanpassen is als ik de hoeveelheid opgehaalde Pokémon ik wil ophalen.
 
+<img src="Assets/README_imgs/Dag3_DetailPagina.png" alt="Detailpagina van een charmander"> 
+
+#### Checkout met Louise
+Louise doet iets met de spotify API, ze maakt een website waarmee je makkelijk nummers kan toevoegen en verwijderen. Voor nu heeft ze alleen een overview pagina, dat was al lastig genoeg omdat ze er ook vaak automatisch eruit wordt gegooid. Volgende week wilt ze bezig met detailpagina's van de verschillende nummers. Zelf heb had ik vandaag een detailpagina gemaakt, ik ben nog niet helemaal tevreden over de styling. Maar zelf wil ik volgende week een begin maken aan het maken van een teatm, en aan de hand van hoelang dat duurt wil ik misschien ook al een begin maken aan de AR functionaliteit.
