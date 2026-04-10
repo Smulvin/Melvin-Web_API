@@ -91,3 +91,5 @@ Deze week ben ik begonnen met het echt maken van mijn project. Ik wil iets gaan 
 - Misschien de centrale knop bovenin gebruiken om AR te triggeren?
 - De styling van de hover op overview aanpassen zodat het iets creatiever is? Achtergrond aanpassen naar een pokeball? Niet alleen het plaatje scalen
 - Leuk idee om verschillende effecten te hebben wanneer een pokemon uit de het team in AR te zien komt.
+- De typings minder laten lijken alsof het knoppen zijn, minder pil vorm
+Misschien een filter systeem op de overview pagina, per typing of per generatie.
