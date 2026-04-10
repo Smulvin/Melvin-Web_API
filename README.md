@@ -84,3 +84,10 @@ Louise doet iets met de spotify API, ze maakt een website waarmee je makkelijk n
 
 ### Weekverslag
 Deze week ben ik begonnen met het echt maken van mijn project. Ik wil iets gaan doen met de Pokémon API. Ik heb hiervoor nu al in ieder geval een overviewpagina en heb een goed begin aan de detail pagina. Er is nog wel meer informatie die ik eventueel zou kunnen laten zien, maar is niet per se nodig. Ook ben ik nog niet tevreden over de styling op mijn detailpagina. Dylan had me een beetje geholpen met het opzetten van mijn detailpagina zodat de routing goed werkt. Hij had dit namelijk eerder al klaar dan ik. In de komende weken wil ik dit project nog uitbreiden door de functionaliteit toe te voegen dat je een team kan samenstellen en dat dit dan eventueel wordt opgeslagen in de localstorage. Maar dat is niet het hoofddoel van mijn project. Ik wil namelijk iets met AR gaan doen. Dit is iets wat ik nog niet eerder met HTML, CSS en Javascript heb gemaakt, dus het zal een flinke uitdaging worden. Tussendoor kreeg ik ook nog het idee om misschien iets te combineren met de Pokémon Trading Card Game API, misschien dat ik die kan gebruiken in combinatie met AR als gezichtsherkenning niet wilt werken. Dat ik dan bijvoorbeeld kaarten gebruik op Pokémon op te zetten in plaats van op je schouder. Maar dat zien we in de komende weken dan wel.
+
+### Voortgangsgesprek
+- Al goed op weg, maar de moneyshot moet nog komen
+- Volgende stap is inderdaad handiger om eerst te kijken naar web API's in plaats te veel focus op styling, ook al heeft styling wel nog aandacht nodig
+- Misschien de centrale knop bovenin gebruiken om AR te triggeren?
+- De styling van de hover op overview aanpassen zodat het iets creatiever is? Achtergrond aanpassen naar een pokeball? Niet alleen het plaatje scalen
+- Leuk idee om verschillende effecten te hebben wanneer een pokemon uit de het team in AR te zien komt.
