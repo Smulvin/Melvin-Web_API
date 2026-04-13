@@ -93,3 +93,4 @@ Deze week ben ik begonnen met het echt maken van mijn project. Ik wil iets gaan 
 - Leuk idee om verschillende effecten te hebben wanneer een pokemon uit de het team in AR te zien komt.
 - De typings minder laten lijken alsof het knoppen zijn, minder pil vorm
 - Misschien een filter systeem op de overview pagina, per typing of per generatie.
+- Skeleton loading
