@@ -34,6 +34,15 @@ try {
           </span>
         ))}
       </div>
+      <button
+        class="add-btn"
+        onclick={`event.stopPropagation(); event.preventDefault(); addToTeam({
+          name: '${pokemon.name}',
+          image: '${pokemon.sprites.other["official-artwork"].front_default}'
+        })`}
+      >
+        +
+      </button>
     </div>
   </a>
 )}
@@ -52,10 +61,17 @@ try {
     font-family: var(--font-jost);
     color: white;
     background: var(--color-accent);
+    position: relative;
+
+    button {
+      background: var(--color-green);
+      top: -15px;
+      right: -15px;
+    }
   }
 
   .card:hover {
-    scale: 1.2;
+    scale: 1.1;
     transition: 0.5s;
   }
 

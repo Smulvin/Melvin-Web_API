@@ -38,6 +38,10 @@
     --color-pokeball: #FF0000;
     --color-pokeball-bottom: #FFFFFF;
 
+    --color-green: #4CAF50;
+    --color-red: #F44336;
+    --color-light-blue: #2196F3;
+
     --font-jost: "Jost", sans-serif;
 }
 
@@ -59,9 +63,21 @@
 .type {
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
-    border-radius: 999px;
+    border-radius: 5px;
     background: #e5e7eb;
     text-transform: capitalize;
+}
+
+.remove-btn, .add-btn{
+    position: absolute;
+    text-align: center;
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid white;
+    color: white;
+    font-weight: bold;
+    font-size: 2rem;
 }
 
 /* Gegenereerd door ChatGPT, kleuren heb ik later zelf via de root gedaan. 

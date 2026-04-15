@@ -1,0 +1,135 @@
+---
+
+---
+
+<div id="team-panel" class="panel">
+    <button id="toggle-btn">Team</button>
+
+    <div class="panel-content">
+        <h2>Your Team</h2>
+        <ul id="team-list"></ul>
+    </div>
+</div>
+
+<script>
+  // @ts-nocheck
+
+  document.addEventListener("DOMContentLoaded", () => {
+    let team = [];
+
+    const panel = document.getElementById("team-panel");
+    const toggleBtn = document.getElementById("toggle-btn");
+    const teamList = document.getElementById("team-list");
+
+    if (!panel || !toggleBtn || !teamList) return;
+
+    toggleBtn.onclick = () => {
+      panel.classList.toggle("open");
+    };
+
+    // Load team
+    const savedTeam = localStorage.getItem("pokemon-team");
+    if (savedTeam) {
+      team = JSON.parse(savedTeam);
+      renderTeam();
+    }
+
+    function saveTeam() {
+      localStorage.setItem("pokemon-team", JSON.stringify(team));
+    }
+
+    window.addToTeam = (pokemon) => {
+      if (team.length >= 6) return alert("Team is full!");
+      if (team.find((p) => p.name === pokemon.name)) return;
+
+      team.push(pokemon);
+      saveTeam();
+      renderTeam();
+    };
+
+    function removeFromTeam(name) {
+      team = team.filter((p) => p.name !== name);
+      saveTeam();
+      renderTeam();
+    }
+
+    function renderTeam() {
+      teamList.innerHTML = "";
+
+      team.forEach((pokemon) => {
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+          <img src="${pokemon.image}" />
+          <span>${pokemon.name}</span>
+          <button class="remove-btn">-</button>
+        `;
+
+        li.querySelector(".remove-btn")?.addEventListener("click", () =>
+          removeFromTeam(pokemon.name)
+        );
+
+        teamList.appendChild(li);
+      });
+    }
+  });
+</script>
+
+<style>
+    .panel {
+        position: fixed;
+        right: -300px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 300px;
+        height: 600px;
+        background: var(--color-light-blue);
+        color: white;
+        transition: right 0.3s;
+        padding: 1rem;
+        z-index: 1000;
+        font-family: var(--font-jost);
+        font-weight: bold;
+    }
+
+    .panel.open {
+        right: 0;
+    }
+
+    #toggle-btn {
+        position: absolute;
+        left: -100px;
+        top: 20px;
+        width: 100px;
+        cursor: pointer; 
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    ul {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        width: 100%;
+        padding: 10px;
+
+        li {
+            text-transform: capitalize;
+            text-align: center;
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+
+    .panel-content ul {
+        list-style: none;
+    }
+
+    .remove-btn {
+        background: var(--color-red);
+    }
+</style>
