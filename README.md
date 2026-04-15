@@ -94,3 +94,138 @@ Deze week ben ik begonnen met het echt maken van mijn project. Ik wil iets gaan 
 - De typings minder laten lijken alsof het knoppen zijn, minder pil vorm
 - Misschien een filter systeem op de overview pagina, per typing of per generatie.
 - Skeleton loading
+
+## Week 3
+### Dag 4: Woensdag 15 - 4 - 2026
+Vandaag werkte ik weer vanuit huis, het was namelijk niet echt duidelijk hoe de les vandaag er uit zou gaan zien en op Teams in de planning was er niks te vinden over deze week. Ik heb gewerkt aan het maken van een team op de website. Ik begon door elke card van een pokemon op de overview pagina een plus button te geven. Daarna werkte ik aan het maken van een zijpaneel waar je je team kon zien. Het duurde niet lang voordat ik werkend kreeg dat je de pokemons daar aan toe kon voegen. Localstorage was niet lastig om hier aan toe te voegen, daar had ik namelijk wel eens eerder al mee gewerkt. De styling ben ik hier wel zeer tevreden over, het duurde even voordat ik het goed kreeg dat de plaatjes en teksten niet meer ruimte innamen dan gegeven is, maar het werkt nu goed.
+
+Daarna heb ik geprobeerd om AI te laten werken. Ik had online iets gevonden over WebXR, maar ik zag ook dat het maar beperkt beschikbaar was voor sommige browser en dat het vooral gefocust was op mobiel. Ik had ChatGPT even snel iets laten maken, maar kwam er toen al snel achter dat het niet zou werken voor Chrome, de browser die ik gebruik. Daarna was ik iets maar gewoon begonnen met het werkend krijgen van de camera, deed lukte snel. Daarna had ik geprobeerd om er een overlay overheen te zetten. Dit werkte wel redelijk voor het plaatsen van pokémon maar ik wist nog niet hoe ik het werkend ging krijgen dat het echt aan de hand van de camera ging. ChatGPT had hier een oplossing voor. Alleen is het dan met een library in plaats van een API, wat volgens mij niet volgens de opdracht regels is. Ik zal dit morgen aan Cyd op school vragen en laten zien wat ik tot nu toe heb.
+
+#### Hulp van ChatGPT
+Prompt: Right it just places the pokemon sprite on the video overlay, but it is not according to the user on the camera. Do you have an Web API that can make that happen?
+
+```
+---
+  <!-- ✅ MediaPipe -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+  <script>
+    // @ts-nocheck
+
+    const btn = document.getElementById("start-camera");
+    const video = document.getElementById("video");
+
+    const pokemon = document.getElementById("pokemon");
+    const switchBtn = document.getElementById("switch");
+
+    // 🎮 Load team
+    let team = [];
+    let selected = 0;
+
+    try {
+      const savedTeam = localStorage.getItem("pokemon-team");
+      if (savedTeam) {
+        const parsed = JSON.parse(savedTeam);
+        if (Array.isArray(parsed) && parsed.length === 6) {
+          team = parsed;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to load team:", e);
+    }
+
+    function getValidTeam() {
+      return (team || []).filter(p => p && typeof p === "object");
+    }
+
+    function setPokemonImage() {
+      const validTeam = getValidTeam();
+
+      if (validTeam.length === 0) {
+        pokemon.style.display = "none";
+        return;
+      }
+
+      if (selected >= validTeam.length) selected = 0;
+
+      const current = validTeam[selected];
+
+      pokemon.style.display = "block";
+      pokemon.src = current.sprite || current.image;
+    }
+
+    // 🔁 Switch Pokémon
+    switchBtn?.addEventListener("click", () => {
+      const validTeam = getValidTeam();
+      if (validTeam.length === 0) return;
+
+      selected = (selected + 1) % validTeam.length;
+      setPokemonImage();
+    });
+
+    // 🧠 Face detection setup
+    const faceDetection = new FaceDetection({
+      locateFile: (file) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
+    });
+
+    faceDetection.setOptions({
+      model: "short",
+      minDetectionConfidence: 0.5,
+    });
+
+    // 🎯 Track face → position Pokémon
+    faceDetection.onResults((results) => {
+      if (!results.detections.length) return;
+
+      const detection = results.detections[0];
+      const box = detection.boundingBox;
+
+      const x = box.xCenter;
+      const y = box.yCenter;
+
+      // Convert to %
+      const left = x * 100;
+      const top = y * 100;
+
+      // 👉 Shoulder offset (tweak if needed)
+      pokemon.style.left = `${left + 10}%`;
+      pokemon.style.top = `${top + 12}%`;
+    });
+
+    // 📷 Start camera + tracking
+    btn?.addEventListener("click", async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+
+        video.srcObject = stream;
+        await video.play();
+
+        // 🚀 Start MediaPipe camera loop
+        const camera = new Camera(video, {
+          onFrame: async () => {
+            await faceDetection.send({ image: video });
+          },
+          width: 600,
+          height: 400,
+        });
+
+        camera.start();
+      } catch (err) {
+        console.error(err);
+        alert("Camera access denied or not available.");
+      }
+    });
+
+    // 🚀 Init
+    setPokemonImage();
+  </script>
+</DefaultLayout>
+```
+
+<img src="Assets/README_imgs/Dag4_TeamPanel.png">
+<img src="Assets/README_imgs/Dag4_BeginAR.png">

@@ -40,7 +40,8 @@
 
     --color-green: #4CAF50;
     --color-red: #F44336;
-    --color-light-blue: #2196F3;
+    --color-blue-light: #2196F3;
+    --color-blue-dark: #1976D2;
 
     --font-jost: "Jost", sans-serif;
 }
@@ -72,12 +73,20 @@
     position: absolute;
     text-align: center;
     width: 50px;
+    height: 50px;
     aspect-ratio: 1;
     border-radius: 50%;
     border: 2px solid white;
     color: white;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;   
+    }
 }
 
 /* Gegenereerd door ChatGPT, kleuren heb ik later zelf via de root gedaan. 
