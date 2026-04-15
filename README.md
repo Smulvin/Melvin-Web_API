@@ -102,7 +102,7 @@ Vandaag werkte ik weer vanuit huis, het was namelijk niet echt duidelijk hoe de 
 Daarna heb ik geprobeerd om AI te laten werken. Ik had online iets gevonden over WebXR, maar ik zag ook dat het maar beperkt beschikbaar was voor sommige browser en dat het vooral gefocust was op mobiel. Ik had ChatGPT even snel iets laten maken, maar kwam er toen al snel achter dat het niet zou werken voor Chrome, de browser die ik gebruik. Daarna was ik iets maar gewoon begonnen met het werkend krijgen van de camera, deed lukte snel. Daarna had ik geprobeerd om er een overlay overheen te zetten. Dit werkte wel redelijk voor het plaatsen van pokémon maar ik wist nog niet hoe ik het werkend ging krijgen dat het echt aan de hand van de camera ging. ChatGPT had hier een oplossing voor. Alleen is het dan met een library in plaats van een API, wat volgens mij niet volgens de opdracht regels is. Ik zal dit morgen aan Cyd op school vragen en laten zien wat ik tot nu toe heb. Ik had nog kort geprobeerd om de battle sprite te gebruiken voor AR maar heb dat voor nu laten zitten.
 
 #### Hulp van ChatGPT
-Prompt: Right it just places the pokemon sprite on the video overlay, but it is not according to the user on the camera. Do you have an Web API that can make that happen?
+Prompt: Right it just places the pokemon sprite on the video overlay, but it is not according to the user on the camera. Do you have an Web API that can make that happen? Give me the full script
 
 ```
 ---
