@@ -1,7 +1,7 @@
 /* Source: https://fonts.google.com/specimen/Jost */
 @font-face {
     font-family: "Jost";
-    src:url("Assets/fonts/Jost-Regular.ttf") format("truetype");
+    src:url("../public/Jost-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -52,6 +52,11 @@
     padding: 0;
 }
 
+body {
+    background: var(--color-background);
+    font-family: var(--font-jost);
+}
+
 .types {
     display: flex;
     justify-content: center;
@@ -71,18 +76,13 @@
 
 .remove-btn, .add-btn{
     position: absolute;
-    text-align: center;
     width: 50px;
     height: 50px;
     aspect-ratio: 1;
     border-radius: 50%;
     border: 2px solid white;
     color: white;
-    font-weight: bold;
-    font-size: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 2rem;
 
     &:hover {
         cursor: pointer;   

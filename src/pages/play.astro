@@ -4,10 +4,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 ---
 
 <DefaultLayout title="Play">
-  <h1>Play</h1>
-
-  <button id="start-camera">Start Camera</button>
-  <button id="switch">Switch Pokémon</button>
+  <h1>Play in AR!</h1>
 
   <div class="camera-box">
     <video id="video" autoplay playsinline></video>
@@ -17,15 +14,23 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       <img id="pokemon" src="" />
     </div>
   </div>
+  <div class="ar-buttons">
+    <button id="start-camera">Start Camera</button>
+    <button id="switch-pokemon">Switch Pokémon</button>
 
-  <!-- ✅ MediaPipe -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <button id="pos-left">Left</button>
+    <button id="pos-right">Right</button>
+    <button id="pos-top">Top</button>
+  </div>
 
-  <script>
-    // Code voor het laten werken van de AR is gegeneerd door ChatGPT
-    /* Prompt: Right it just places the pokemon sprite on the video overlay, but it is not according to the user 
-    on the camera. Do you have an Web API that can make that happen? Give me the full script */
+  <!-- Code voor het laten werken van de AR is gegeneerd door ChatGPT 
+  Prompt:
+  Right it just places the pokemon sprite on the video overlay, but it is not
+  according to the user on the camera. Do you have an Web API that can make that
+  happen? Give me the full script  -->
+  <script type="module">
+    import "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js";
+    import "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
 
     // @ts-nocheck
 
@@ -33,7 +38,22 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     const video = document.getElementById("video");
 
     const pokemon = document.getElementById("pokemon");
-    const switchBtn = document.getElementById("switch");
+    const switchBtn = document.getElementById("switch-pokemon");
+
+    // 🎯 Position control
+    let position = "right";
+
+    document.getElementById("pos-left")?.addEventListener("click", () => {
+      position = "left";
+    });
+
+    document.getElementById("pos-right")?.addEventListener("click", () => {
+      position = "right";
+    });
+
+    document.getElementById("pos-top")?.addEventListener("click", () => {
+      position = "top";
+    });
 
     // 🎮 Load team
     let team = [];
@@ -52,10 +72,10 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     }
 
     function getValidTeam() {
-      return (team || []).filter(p => p && typeof p === "object");
+      return (team || []).filter((p) => p && typeof p === "object");
     }
 
-    function setPokemonImage() {
+    async function setPokemonImage() {
       const validTeam = getValidTeam();
 
       if (validTeam.length === 0) {
@@ -68,10 +88,21 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       const current = validTeam[selected];
 
       pokemon.style.display = "block";
-      pokemon.src = current.sprite || current.image;
+
+      try {
+        const res = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${current.name || current.id}`,
+        );
+        const data = await res.json();
+
+        pokemon.src = data.sprites.front_default;
+      } catch (err) {
+        console.error("Failed to load sprite:", err);
+        pokemon.src = current.image;
+      }
     }
 
-    // 🔁 Switch Pokémon
+    // Switch Pokémon
     switchBtn?.addEventListener("click", () => {
       const validTeam = getValidTeam();
       if (validTeam.length === 0) return;
@@ -80,11 +111,11 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       setPokemonImage();
     });
 
-    // 🧠 Face detection setup
-    const faceDetection = new FaceDetection({
+    // 🧠 Face detection
+    const faceDetection = new window.FaceDetection({
       locateFile: (file) =>
         `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
-    });
+    });  
 
     faceDetection.setOptions({
       model: "short",
@@ -101,16 +132,37 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       const x = box.xCenter;
       const y = box.yCenter;
 
-      // Convert to %
       const left = x * 100;
       const top = y * 100;
 
-      // 👉 Shoulder offset (tweak if needed)
-      pokemon.style.left = `${left + 10}%`;
-      pokemon.style.top = `${top + 12}%`;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      switch (position) {
+        case "left":
+          offsetX = -20;
+          offsetY = 15;
+          pokemon.style.width = "250px";
+          break;
+
+        case "right":
+          offsetX = 20;
+          offsetY = 15;
+          pokemon.style.width = "250px";
+          break;
+
+        case "top":
+          offsetX = 0;
+          offsetY = -45;
+          pokemon.style.width = "180px";
+          break;
+      }
+
+      pokemon.style.left = `${left + offsetX}%`;
+      pokemon.style.top = `${top + offsetY}%`;
     });
 
-    // 📷 Start camera + tracking
+    // 📷 Start camera
     btn?.addEventListener("click", async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -121,8 +173,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         video.srcObject = stream;
         await video.play();
 
-        // 🚀 Start MediaPipe camera loop
-        const camera = new Camera(video, {
+        const camera = new window.Camera(video, {
           onFrame: async () => {
             await faceDetection.send({ image: video });
           },
@@ -142,25 +193,36 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
   </script>
 
   <style>
-    button {
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      background: #2d6cdf;
+    h1 {
+      text-align: center;
       color: white;
-      margin-right: 0.5rem;
+      margin: 5rem 0 2rem 0;
+    }
+
+    .ar-buttons {
+      width: 80%;
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem auto;
+
+      button {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        background: #2d6cdf;
+        color: white;
+      }
     }
 
     .camera-box {
       position: relative;
-      width: 600px;
-      height: 400px;
-      border: 2px solid white;
+      width: 80%;
+      aspect-ratio: 1920 / 1080;
       overflow: hidden;
       border-radius: 12px;
-      margin-top: 1rem;
+      margin: 1rem auto;
     }
 
     video {
@@ -177,12 +239,13 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
     #pokemon {
       position: absolute;
-      width: 90px;
+      width: 250px;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      transition: left 0.1s linear, top 0.1s linear;
-      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.4));
+      transition:
+        left 0.1s linear,
+        top 0.1s linear;
     }
   </style>
 </DefaultLayout>

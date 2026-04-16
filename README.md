@@ -232,3 +232,6 @@ Prompt: Right it just places the pokemon sprite on the video overlay, but it is 
 
 #### Checkout met Dylan
 Ik wist dat Dylan vandaag ook thuis was, dus hadden we even aan elkaar laten zien wat we tot nu toe hebben. Onze projecten beginnen nu wel echt uiteen te lopen. Dylan heeft namelijk nu op een canvas al een gebied waarin je kan rond lopen en heeft al een speler met verschillende loop sprites.
+
+### Dag 5: Donderdag 16 - 4 - 2025
+Vandaag werkte ik weer op school, had meteen aan Cyd gevraagd om te vragen of het goed was dat ik library gebruikte voor AR ipv een API. Ze had nog even meegekeken maar stelde voor om ook aan Jad te vragen. Die kwam tot dezelfde conclusies. Ik kan verder met waar ik nu mee bezig was. Daarna heb ik mijn font werkend gekregen door hem uberhaupt aan het project toe te voegen, heb ik icons toegevoegd voor + en - die ik van fontawesome heb gehaald. Heb ik wat styling gedaan op de AR pagina, en heb Cyd nog even om ideeën gevraagd. Zij stelde voor om het even uit te schetsen. Daarbuiten heb ik mijn home knop ook nog werkend gemaakt en heb ik geprobeerd met de AR te spelen door de pokemon kleiner te maken als het gezicht kleiner is en de afstand tot schouder kleiner te maken zodat ze niet zweven. Daar had ik een begin voor, maar nog niet compleet perfect werkend.

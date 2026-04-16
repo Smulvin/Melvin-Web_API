@@ -1,7 +1,7 @@
 ---
 
 ---
-<div id="team-panel" class="panel">
+<dialogue id="team-panel" class="panel">
   <button id="toggle-btn">Team</button>
 
   <div class="panel-content">
@@ -9,7 +9,7 @@
     <ul id="team-list"></ul>
     <a class="play-btn" href="/play">Play</a>
   </div>
-</div>
+</dialogue>
 
 <script>
   // @ts-nocheck
@@ -73,7 +73,7 @@
           li.innerHTML = `
             <img src="${pokemon.image}" />
             <span>${pokemon.name}</span>
-            <button class="remove-btn">-</button>
+            <button class="remove-btn"><i class="fa-solid fa-minus"></i></button>
           `;
 
           li.querySelector(".remove-btn")?.addEventListener("click", () =>
@@ -105,7 +105,6 @@
     transition: right 0.3s;
     padding: 1rem;
     z-index: 10;
-    font-family: var(--font-jost);
     font-weight: bold;
   }
 
