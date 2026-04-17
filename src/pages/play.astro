@@ -12,15 +12,14 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     <!-- Overlay layer -->
     <div class="overlay">
       <img id="pokemon" src="" />
+      <button id="pos-left">Left</button>
+      <button id="pos-right">Right</button>
+      <button id="pos-top">Top</button>
     </div>
   </div>
   <div class="ar-buttons">
     <button id="start-camera">Start Camera</button>
     <button id="switch-pokemon">Switch Pokémon</button>
-
-    <button id="pos-left">Left</button>
-    <button id="pos-right">Right</button>
-    <button id="pos-top">Top</button>
   </div>
 
   <!-- Code voor het laten werken van de AR is gegeneerd door ChatGPT 
@@ -32,28 +31,22 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     import "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js";
     import "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
 
-    // @ts-nocheck
-
     const btn = document.getElementById("start-camera");
     const video = document.getElementById("video");
 
     const pokemon = document.getElementById("pokemon");
     const switchBtn = document.getElementById("switch-pokemon");
 
+    const btnLeft = document.getElementById("pos-left");
+    const btnRight = document.getElementById("pos-right");
+    const btnTop = document.getElementById("pos-top");
+
     // 🎯 Position control
     let position = "right";
 
-    document.getElementById("pos-left")?.addEventListener("click", () => {
-      position = "left";
-    });
-
-    document.getElementById("pos-right")?.addEventListener("click", () => {
-      position = "right";
-    });
-
-    document.getElementById("pos-top")?.addEventListener("click", () => {
-      position = "top";
-    });
+    btnLeft?.addEventListener("click", () => (position = "left"));
+    btnRight?.addEventListener("click", () => (position = "right"));
+    btnTop?.addEventListener("click", () => (position = "top"));
 
     // 🎮 Load team
     let team = [];
@@ -86,7 +79,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       if (selected >= validTeam.length) selected = 0;
 
       const current = validTeam[selected];
-
       pokemon.style.display = "block";
 
       try {
@@ -94,7 +86,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
           `https://pokeapi.co/api/v2/pokemon/${current.name || current.id}`,
         );
         const data = await res.json();
-
         pokemon.src = data.sprites.front_default;
       } catch (err) {
         console.error("Failed to load sprite:", err);
@@ -102,7 +93,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       }
     }
 
-    // Switch Pokémon
     switchBtn?.addEventListener("click", () => {
       const validTeam = getValidTeam();
       if (validTeam.length === 0) return;
@@ -115,14 +105,14 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     const faceDetection = new window.FaceDetection({
       locateFile: (file) =>
         `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
-    });  
+    });
 
     faceDetection.setOptions({
       model: "short",
       minDetectionConfidence: 0.5,
     });
 
-    // 🎯 Track face → position Pokémon
+    // 🎯 Track face → position EVERYTHING proportionally
     faceDetection.onResults((results) => {
       if (!results.detections.length) return;
 
@@ -135,26 +125,53 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       const left = x * 100;
       const top = y * 100;
 
+      // 📏 Face size (relative → %)
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
+
+      const faceWidthPx = box.width * videoWidth;
+      const faceHeightPx = box.height * videoHeight;
+
+      // keep % for positioning
+      const faceWidth = box.width * 100;
+      const faceHeight = box.height * 100;
+
+      // 🎯 Scaled offsets
+      const shoulderOffsetX = faceWidth * 1;
+      const shoulderOffsetY = faceHeight * 0.5;
+      const headOffsetY = faceHeight * 1.2;
+
+      // 🎮 Move buttons with face
+      btnLeft.style.left = `${left - shoulderOffsetX}%`;
+      btnLeft.style.top = `${top + shoulderOffsetY}%`;
+
+      btnRight.style.left = `${left + shoulderOffsetX}%`;
+      btnRight.style.top = `${top + shoulderOffsetY}%`;
+
+      btnTop.style.left = `${left}%`;
+      btnTop.style.top = `${top - headOffsetY}%`;
+
+      // 🐱 Pokémon positioning
       let offsetX = 0;
       let offsetY = 0;
 
       switch (position) {
         case "left":
-          offsetX = -20;
-          offsetY = 15;
-          pokemon.style.width = "250px";
+          offsetX = -shoulderOffsetX;
+          offsetY = shoulderOffsetY;
+          pokemon.style.width = `${faceWidth * 20}px`;
           break;
 
         case "right":
-          offsetX = 20;
-          offsetY = 15;
-          pokemon.style.width = "250px";
+          offsetX = shoulderOffsetX;
+          offsetY = shoulderOffsetY;
+          pokemon.style.width = `${faceWidth * 20}px`;
           break;
 
         case "top":
           offsetX = 0;
-          offsetY = -45;
-          pokemon.style.width = "180px";
+          offsetY = -headOffsetY;
+          pokemon.style.width = `${faceWidth * 16}px`;
           break;
       }
 
@@ -234,7 +251,14 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     .overlay {
       position: absolute;
       inset: 0;
-      pointer-events: none;
+
+      button {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        padding: 7rem;
+        cursor: pointer;
+        opacity: 0;
+      }
     }
 
     #pokemon {

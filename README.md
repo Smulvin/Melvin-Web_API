@@ -235,3 +235,11 @@ Ik wist dat Dylan vandaag ook thuis was, dus hadden we even aan elkaar laten zie
 
 ### Dag 5: Donderdag 16 - 4 - 2025
 Vandaag werkte ik weer op school, had meteen aan Cyd gevraagd om te vragen of het goed was dat ik library gebruikte voor AR ipv een API. Ze had nog even meegekeken maar stelde voor om ook aan Jad te vragen. Die kwam tot dezelfde conclusies. Ik kan verder met waar ik nu mee bezig was. Daarna heb ik mijn font werkend gekregen door hem uberhaupt aan het project toe te voegen, heb ik icons toegevoegd voor + en - die ik van fontawesome heb gehaald. Heb ik wat styling gedaan op de AR pagina, en heb Cyd nog even om ideeën gevraagd. Zij stelde voor om het even uit te schetsen. Daarbuiten heb ik mijn home knop ook nog werkend gemaakt en heb ik geprobeerd met de AR te spelen door de pokemon kleiner te maken als het gezicht kleiner is en de afstand tot schouder kleiner te maken zodat ze niet zweven. Daar had ik een begin voor, maar nog niet compleet perfect werkend.
+
+<img src="Assets/README_imgs/Dag5_AR-Styling.png">
+
+### Vrijdag 17 - 4 - 2026
+In de ochtend op de vrijdag heb ik nog even aan het project gezeten. Ik heb vandaag gewerkt aan de AR om ervoor te zorgen dat de buttons voor locatie nu op de AR staan, deze gaan dan ook mee met het gezicht. Maar toen kwam ook weer het probleem dat de pokemon in de lucht kan te zweven als het gezicht kleiner werd. Door wat berekeningen is dat nu beter geformateerd.
+
+<img src="Assets/README_imgs/ButtonsOpOverlay.png">
+<img src="Assets/README_imgs/ButtonsARScalable.png">
