@@ -243,3 +243,6 @@ In de ochtend op de vrijdag heb ik nog even aan het project gezeten. Ik heb vand
 
 <img src="Assets/README_imgs/ButtonsOpOverlay.png">
 <img src="Assets/README_imgs/ButtonsARScalable.png">
+
+### Weekverslag
+Deze week ben ik ver op weg gekomen met het maken van de AR functie. Ik was eerst begonnen met het maken van een teamfunctie die werd opgeslagen met de localhost API, dit werkte snel omdat ik al eens eerder met die API had gewerkt. Daarna ging ik de AR werkend te krijgen met de WebXR API. Hier had ik eerst ChatGPT voor gevraagd om te kijken of het wel mogelijk was, aangezien het misschien niet ondersteund werd. In eerste instantie was dit ook de conclusie, dat het niet zou werken met de WebXR API, na wat onderzoek bleek het specifieker te zijn dat het alleen niet zou werken op de desktop versie. Het was me wel gelukt dezelfde functionaliteit te krijgen door gebruik van een normale camera en een face detection library. Cyd en Jad vonden dit allebei een goede oplossing. Hier heb ik toen nog een beetje mee gespeeld zodat je de pokémon op beide schouders en op je hoofd kon zetten en heb later gefixt dat in plaats van dat je dat doet met externe buttons dat het "knoppen" zijn die in de AR overlay al meteen zitten. Volgende week wil ik gaan werken aan het mooi maken van de AR en het zo spectaculair mogelijk maken. 
