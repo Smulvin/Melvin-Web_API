@@ -13,7 +13,9 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     <div class="overlay">
       <img id="pokemon" src="" />
 
-      <button id="team-toggle" class="team-toggle">Team</button>
+      <button id="team-toggle" class="team-toggle">
+        <div></div>
+      </button>
       <div id="team-menu" class="team-menu"></div>
       <template id="team-item-template">
         <div class="team-item">
@@ -31,84 +33,110 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
   <!-- Code voor het laten werken van de AR is gegeneerd door ChatGPT 
   Prompt:
-  Right it just places the pokemon sprite on the video overlay, but it is not
+  Right now it just places the pokemon sprite on the video overlay, but it is not
   according to the user on the camera. Do you have an Web API that can make that
   happen? Give me the full script  -->
   <script type="module">
     import "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js";
     import "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
 
-    const btn = document.getElementById("start-camera");
-    const video = document.getElementById("video");
+    // ─────────────────────────────
+    // 1. DOM + STATE
+    // ─────────────────────────────
+    const $ = (id) => document.getElementById(id);
 
-    const pokemon = document.getElementById("pokemon");
-    const switchBtn = document.getElementById("switch-pokemon");
+    const videoElement = $("video");
+    const startCameraButton = $("start-camera");
 
-    const btnLeft = document.getElementById("pos-left");
-    const btnRight = document.getElementById("pos-right");
-    const btnTop = document.getElementById("pos-top");
+    const pokemonImage = $("pokemon");
 
-    // 🎯 Position control
-    let position = "right";
+    const teamToggleButton = $("team-toggle");
+    const teamMenu = $("team-menu");
+    const teamItemTemplate = $("team-item-template");
 
-    btnLeft?.addEventListener("click", () => (position = "left"));
-    btnRight?.addEventListener("click", () => (position = "right"));
-    btnTop?.addEventListener("click", () => (position = "top"));
+    const positionLeftButton = $("pos-left");
+    const positionRightButton = $("pos-right");
+    const positionTopButton = $("pos-top");
 
-    // 🎮 Load team
-    let team = [];
-    let selected = 0;
+    let selectedPosition = "right";
+    let selectedPokemonIndex = 0;
+    let isTeamMenuOpen = false;
 
-    try {
-      const savedTeam = localStorage.getItem("pokemon-team");
-      if (savedTeam) {
-        const parsed = JSON.parse(savedTeam);
-        if (Array.isArray(parsed) && parsed.length === 6) {
-          team = parsed;
-        }
-      }
-    } catch (e) {
-      console.error("Failed to load team:", e);
-    }
+    positionLeftButton.onclick = () => (selectedPosition = "left");
+    positionRightButton.onclick = () => (selectedPosition = "right");
+    positionTopButton.onclick = () => (selectedPosition = "top");
 
-    function getValidTeam() {
-      return (team || []).filter((p) => p && typeof p === "object");
-    }
+    // ─────────────────────────────
+    // 2. TEAM + POKÉMON
+    // ─────────────────────────────
+    const team = JSON.parse(localStorage.getItem("pokemon-team") || "[]");
 
-    async function setPokemonImage() {
-      const validTeam = getValidTeam();
+    const getValidTeam = () => team.filter(Boolean);
 
-      if (validTeam.length === 0) {
-        pokemon.style.display = "none";
-        return;
-      }
-
-      if (selected >= validTeam.length) selected = 0;
-
-      const current = validTeam[selected];
-      pokemon.style.display = "block";
-
+    async function fetchPokemonSprite(pokemon) {
       try {
         const res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${current.name || current.id}`,
+          `https://pokeapi.co/api/v2/pokemon/${pokemon.name || pokemon.id}`,
         );
         const data = await res.json();
-        pokemon.src = data.sprites.front_default;
-      } catch (err) {
-        console.error("Failed to load sprite:", err);
-        pokemon.src = current.image;
+        return data.sprites.front_default;
+      } catch {
+        return pokemon.image;
       }
     }
 
-    switchBtn?.addEventListener("click", () => {
+    async function updateDisplayedPokemon() {
       const validTeam = getValidTeam();
-      if (validTeam.length === 0) return;
+      if (!validTeam.length) return;
 
-      selected = (selected + 1) % validTeam.length;
-      setPokemonImage();
-    });
+      selectedPokemonIndex %= validTeam.length;
 
-    // 🧠 Face detection
+      const spriteUrl = await fetchPokemonSprite(
+        validTeam[selectedPokemonIndex],
+      );
+
+      pokemonImage.style.display = "block";
+      pokemonImage.src = spriteUrl;
+    }
+
+    teamToggleButton.onclick = () => {
+      isTeamMenuOpen = !isTeamMenuOpen;
+
+      teamMenu.classList.toggle("open", isTeamMenuOpen);
+      teamToggleButton.classList.toggle("active", isTeamMenuOpen);
+
+      if (isTeamMenuOpen) renderTeamMenu();
+    };
+
+    async function renderTeamMenu() {
+      const validTeam = getValidTeam();
+      teamMenu.innerHTML = "";
+
+      for (let i = 0; i < validTeam.length; i++) {
+        const pokemon = validTeam[i];
+
+        const spriteUrl = await fetchPokemonSprite(pokemon);
+
+        const spriteImg = document.createElement("img");
+        spriteImg.className = "team-sprite";
+        spriteImg.src = spriteUrl;
+
+        const menuItem =
+          teamItemTemplate.content.firstElementChild.cloneNode(true);
+        menuItem.querySelector("img").replaceWith(spriteImg);
+
+        menuItem.onclick = () => {
+          selectedPokemonIndex = i;
+          updateDisplayedPokemon();
+        };
+
+        teamMenu.appendChild(menuItem);
+      }
+    }
+
+    // ─────────────────────────────
+    // 3. CAMERA + FACE TRACKING
+    // ─────────────────────────────
     const faceDetection = new window.FaceDetection({
       locateFile: (file) =>
         `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
@@ -119,160 +147,84 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       minDetectionConfidence: 0.5,
     });
 
-    // 🎯 Track face → position EVERYTHING proportionally
-    faceDetection.onResults((results) => {
-      if (!results.detections.length) return;
+    faceDetection.onResults(({ detections }) => {
+      if (!detections.length) return;
 
-      const detection = results.detections[0];
-      const box = detection.boundingBox;
+      const face = detections[0].boundingBox;
 
-      const x = box.xCenter;
-      const y = box.yCenter;
+      // Face center in percentage of screen
+      const faceCenterX = face.xCenter * 100;
+      const faceCenterY = face.yCenter * 100;
 
-      const left = x * 100;
-      const top = y * 100;
+      // Face size in percentage
+      const faceWidthPct = face.width * 100;
+      const faceHeightPct = face.height * 100;
 
-      // 📏 Face size (relative → %)
-      const videoWidth = video.videoWidth;
-      const videoHeight = video.videoHeight;
+      // Offsets based on face size
+      const sideOffset = faceWidthPct;
+      const eyeLevelOffset = faceHeightPct * 0.5;
+      const aboveHeadOffset = faceHeightPct * 1.6;
 
-      const faceWidthPx = box.width * videoWidth;
-      const faceHeightPx = box.height * videoHeight;
+      // Position helper buttons around face
+      positionLeftButton.style.left = `${faceCenterX - sideOffset}%`;
+      positionLeftButton.style.top = `${faceCenterY + eyeLevelOffset}%`;
 
-      // keep % for positioning
-      const faceWidth = box.width * 100;
-      const faceHeight = box.height * 100;
+      positionRightButton.style.left = `${faceCenterX + sideOffset}%`;
+      positionRightButton.style.top = `${faceCenterY + eyeLevelOffset}%`;
 
-      // 🎯 Scaled offsets
-      const shoulderOffsetX = faceWidth * 1;
-      const shoulderOffsetY = faceHeight * 0.5;
-      const headOffsetY = faceHeight * 1.2;
+      positionTopButton.style.left = `${faceCenterX}%`;
+      positionTopButton.style.top = `${faceCenterY - aboveHeadOffset}%`;
 
-      // 🎮 Move buttons with face
-      btnLeft.style.left = `${left - shoulderOffsetX}%`;
-      btnLeft.style.top = `${top + shoulderOffsetY}%`;
-
-      btnRight.style.left = `${left + shoulderOffsetX}%`;
-      btnRight.style.top = `${top + shoulderOffsetY}%`;
-
-      btnTop.style.left = `${left}%`;
-      btnTop.style.top = `${top - headOffsetY}%`;
-
-      // 🐱 Pokémon positioning
+      // Pokémon offset depending on selected position
       let offsetX = 0;
       let offsetY = 0;
 
-      switch (position) {
-        case "left":
-          offsetX = -shoulderOffsetX;
-          offsetY = shoulderOffsetY;
-          pokemon.style.width = `${faceWidth * 20}px`;
-          break;
-
-        case "right":
-          offsetX = shoulderOffsetX;
-          offsetY = shoulderOffsetY;
-          pokemon.style.width = `${faceWidth * 20}px`;
-          break;
-
-        case "top":
-          offsetX = 0;
-          offsetY = -headOffsetY;
-          pokemon.style.width = `${faceWidth * 16}px`;
-          break;
+      if (selectedPosition === "left") {
+        offsetX = -sideOffset;
+        offsetY = eyeLevelOffset;
       }
 
-      pokemon.style.left = `${left + offsetX}%`;
-      pokemon.style.top = `${top + offsetY}%`;
+      if (selectedPosition === "right") {
+        offsetX = sideOffset;
+        offsetY = eyeLevelOffset;
+      }
+
+      if (selectedPosition === "top") {
+        offsetX = 0;
+        offsetY = -aboveHeadOffset;
+      }
+
+      pokemonImage.style.width =
+        selectedPosition === "top"
+          ? `${faceWidthPct * 16}px`
+          : `${faceWidthPct * 20}px`;
+
+      pokemonImage.style.left = `${faceCenterX + offsetX}%`;
+      pokemonImage.style.top = `${faceCenterY + offsetY}%`;
     });
 
-    // 📷 Start camera
-    btn?.addEventListener("click", async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: false,
-        });
+    // ─────────────────────────────
+    // 4. START CAMERA
+    // ─────────────────────────────
+    startCameraButton.onclick = async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
 
-        video.srcObject = stream;
-        await video.play();
+      videoElement.srcObject = stream;
+      await videoElement.play();
 
-        const camera = new window.Camera(video, {
-          onFrame: async () => {
-            await faceDetection.send({ image: video });
-          },
-          width: 600,
-          height: 400,
-        });
+      const camera = new window.Camera(videoElement, {
+        onFrame: async () => faceDetection.send({ image: videoElement }),
+      });
 
-        camera.start();
+      camera.start();
 
-        // ✅ Hide start button
-        btn.style.display = "none";
+      startCameraButton.style.display = "none";
+      document.querySelector(".overlay").classList.add("ar-active");
 
-        // ✅ Activate AR UI properly (THIS is the fix)
-        document.querySelector(".overlay").classList.add("ar-active");
-      } catch (err) {
-        console.error(err);
-        alert("Camera access denied or not available.");
-      }
-
-      setPokemonImage();
-    });
-
-    // Team Select
-    const teamToggle = document.getElementById("team-toggle");
-    const teamMenu = document.getElementById("team-menu");
-    const template = document.getElementById("team-item-template");
-
-    let menuOpen = false;
-
-    teamToggle?.addEventListener("click", () => {
-      menuOpen = !menuOpen;
-
-      if (menuOpen) {
-        teamMenu.classList.add("open");
-        renderTeamMenu();
-      } else {
-        teamMenu.classList.remove("open");
-      }
-    });
-
-    async function renderTeamMenu() {
-      const validTeam = getValidTeam();
-      teamMenu.innerHTML = "";
-
-      for (let i = 0; i < validTeam.length; i++) {
-        const p = validTeam[i];
-
-        let imgSrc = p.image;
-
-        try {
-          const res = await fetch(
-            `https://pokeapi.co/api/v2/pokemon/${p.name || p.id}`,
-          );
-          const data = await res.json();
-          imgSrc = data.sprites.front_default;
-        } catch (e) {
-          console.warn("Sprite fallback used");
-        }
-
-        // ✅ Clone template
-        const clone = template.content.cloneNode(true);
-
-        const item = clone.querySelector(".team-item");
-        const img = clone.querySelector(".team-sprite");
-
-        img.src = imgSrc;
-
-        item.addEventListener("click", () => {
-          selected = i;
-          setPokemonImage();
-        });
-
-        teamMenu.appendChild(clone);
-      }
-    }
+      updateDisplayedPokemon();
+    };
   </script>
 
   <style>
@@ -321,34 +273,30 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         top 0.1s linear;
     }
 
-    /* hidden unless AR is active */
-.team-toggle,
-.team-menu {
-  display: none;
-}
+    .team-toggle,
+    .team-menu {
+      display: none;
+    }
 
-/* AR mode ON */
-.overlay.ar-active .team-toggle {
-  display: block;
-}
+    .overlay.ar-active .team-toggle {
+      display: block;
+    }
 
-/* menu base (no display here anymore!) */
-.team-menu {
-  position: absolute;
-  flex-direction: column;
-  gap: 0.5rem;
-  z-index: 20;
-}
+    .team-menu {
+      position: absolute;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 20;
+    }
 
-/* ONLY open state controls visibility */
-.team-menu.open {
-  display: flex;
-}
+    .team-menu.open {
+      display: flex;
+    }
 
-.team-item {
-  background: var(--color-blue-light);
-  border-radius: 50%;
-}
+    .team-item {
+      background: var(--color-blue-light);
+      border-radius: 50%;
+    }
 
     #start-camera {
       position: absolute;
@@ -363,6 +311,50 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       border: 5px solid white;
       font-weight: bold;
       font-size: 2rem;
+    }
+
+    .team-toggle {
+      aspect-ratio: 1;
+      width: 5rem;
+      position: relative;
+      margin: 1rem;
+      border-radius: 50%;
+      border: none;
+
+      div:before {
+        content: "";
+        position: absolute;
+        height: 50%;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: red;
+        border-radius: 50px 50px 0 0;
+      }
+
+      div:after {
+        content: "";
+        position: absolute;
+        height: 30%;
+        aspect-ratio: 1;
+        background: white;
+        border: 2px solid black;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+      }
+    }
+
+    .team-toggle.active {
+      div:before {
+        transform: translateY(-20%) scaleY(0.9);
+        box-shadow: 0 10px 0 gray;
+      }
+
+      div:after {
+        transform: translate(-50%, -70%) scaleY(0.9);
+      }
     }
   </style>
 </DefaultLayout>
