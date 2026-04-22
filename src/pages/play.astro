@@ -12,14 +12,21 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     <!-- Overlay layer -->
     <div class="overlay">
       <img id="pokemon" src="" />
-      <button id="pos-left">Left</button>
-      <button id="pos-right">Right</button>
-      <button id="pos-top">Top</button>
+
+      <button id="team-toggle" class="team-toggle">Team</button>
+      <div id="team-menu" class="team-menu"></div>
+      <template id="team-item-template">
+        <div class="team-item">
+          <img class="team-sprite" />
+        </div>
+      </template>
+
+      <button class="location-btn" id="pos-left">Left</button>
+      <button class="location-btn" id="pos-right">Right</button>
+      <button class="location-btn" id="pos-top">Top</button>
+
+      <button id="start-camera">Start Camera</button>
     </div>
-  </div>
-  <div class="ar-buttons">
-    <button id="start-camera">Start Camera</button>
-    <button id="switch-pokemon">Switch Pokémon</button>
   </div>
 
   <!-- Code voor het laten werken van de AR is gegeneerd door ChatGPT 
@@ -199,14 +206,73 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         });
 
         camera.start();
+
+        // ✅ Hide start button
+        btn.style.display = "none";
+
+        // ✅ Activate AR UI properly (THIS is the fix)
+        document.querySelector(".overlay").classList.add("ar-active");
       } catch (err) {
         console.error(err);
         alert("Camera access denied or not available.");
       }
+
+      setPokemonImage();
     });
 
-    // 🚀 Init
-    setPokemonImage();
+    // Team Select
+    const teamToggle = document.getElementById("team-toggle");
+    const teamMenu = document.getElementById("team-menu");
+    const template = document.getElementById("team-item-template");
+
+    let menuOpen = false;
+
+    teamToggle?.addEventListener("click", () => {
+      menuOpen = !menuOpen;
+
+      if (menuOpen) {
+        teamMenu.classList.add("open");
+        renderTeamMenu();
+      } else {
+        teamMenu.classList.remove("open");
+      }
+    });
+
+    async function renderTeamMenu() {
+      const validTeam = getValidTeam();
+      teamMenu.innerHTML = "";
+
+      for (let i = 0; i < validTeam.length; i++) {
+        const p = validTeam[i];
+
+        let imgSrc = p.image;
+
+        try {
+          const res = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${p.name || p.id}`,
+          );
+          const data = await res.json();
+          imgSrc = data.sprites.front_default;
+        } catch (e) {
+          console.warn("Sprite fallback used");
+        }
+
+        // ✅ Clone template
+        const clone = template.content.cloneNode(true);
+
+        const item = clone.querySelector(".team-item");
+        const img = clone.querySelector(".team-sprite");
+
+        img.src = imgSrc;
+
+        item.addEventListener("click", () => {
+          selected = i;
+          setPokemonImage();
+        });
+
+        teamMenu.appendChild(clone);
+      }
+    }
   </script>
 
   <style>
@@ -214,23 +280,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       text-align: center;
       color: white;
       margin: 5rem 0 2rem 0;
-    }
-
-    .ar-buttons {
-      width: 80%;
-      display: flex;
-      justify-content: space-between;
-      margin: 1rem auto;
-
-      button {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-        cursor: pointer;
-        border: none;
-        border-radius: 8px;
-        background: #2d6cdf;
-        color: white;
-      }
     }
 
     .camera-box {
@@ -252,7 +301,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       position: absolute;
       inset: 0;
 
-      button {
+      .location-btn {
         position: absolute;
         transform: translate(-50%, -50%);
         padding: 7rem;
@@ -270,6 +319,50 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       transition:
         left 0.1s linear,
         top 0.1s linear;
+    }
+
+    /* hidden unless AR is active */
+.team-toggle,
+.team-menu {
+  display: none;
+}
+
+/* AR mode ON */
+.overlay.ar-active .team-toggle {
+  display: block;
+}
+
+/* menu base (no display here anymore!) */
+.team-menu {
+  position: absolute;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+/* ONLY open state controls visibility */
+.team-menu.open {
+  display: flex;
+}
+
+.team-item {
+  background: var(--color-blue-light);
+  border-radius: 50%;
+}
+
+    #start-camera {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      background: var(--color-green);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      border: 5px solid white;
+      font-weight: bold;
+      font-size: 2rem;
     }
   </style>
 </DefaultLayout>
