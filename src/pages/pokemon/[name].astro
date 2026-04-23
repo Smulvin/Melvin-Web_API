@@ -48,236 +48,305 @@ function extractEvolutions(chain) {
   return result;
 }
 const evolutionData = extractEvolutions(evoData.chain);
-
-// Fetch detailed info for moves
-async function getMoveDetails(move) {
-  const moveRes = await fetch(move.move.url);
-  const moveData = await moveRes.json();
-  return {
-    name: moveData.name,
-    type: moveData.type.name,
-    power: moveData.power,
-    class: moveData.damage_class.name,
-  };
-}
-
-// Level-up moves
-const levelUpMoves = await Promise.all(
-  pokemon.moves
-    .filter((m) =>
-      m.version_group_details.some(
-        (v) => v.move_learn_method.name === "level-up",
-      ),
-    )
-    .slice(0, 20) // optional limit
-    .map(getMoveDetails),
-);
-
-// TM/HM moves
-const machineMoves = await Promise.all(
-  pokemon.moves
-    .filter((m) =>
-      m.version_group_details.some(
-        (v) => v.move_learn_method.name === "machine",
-      ),
-    )
-    .map(getMoveDetails),
-);
 ---
 
 <DefaultLayout title={pokemon.name}>
   <div class="pokemon-info">
-    <div class="basic-info">
-      <h1>{pokemon.name}</h1>
-      <p>#{pokemon.id}</p>
-      <img src={pokemon.sprites.other['official-artwork'].front_default} alt={pokemon.name} />
-      <p class="height">Height: {pokemon.height / 10} m</p>
-      <p class="weight">Weight: {pokemon.weight / 10} kg</p>
-
-      <ul class="types">
-        {
-          pokemon.types?.map((t) => (
-            <li class={`type type-${t.type.name}`}>{t.type.name}</li>
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="cry-evolution">
-      <button onclick={`new Audio('${pokemon.cries?.latest}').play()`}
-        >Play Cry</button
-      >
-
-      <div class="evolution-chain">
-        {
-          evolutionData.map((evo) => (
-            <a href={`/pokemon/${evo.name}`} class="evo">
-              <img src={evo.sprite} alt={evo.name} />
-            </a>
-          ))
-        }
+    <div class="detail-top">
+      <div class="detail-name container">
+        <h1>{pokemon.name}</h1>
+        <p>#{pokemon.id}</p>
+      </div>
+      <div class="detail-types container">
+        <ul>
+          {
+            pokemon.types?.map((t) => (
+              <li class={`type type-${t.type.name}`}>{t.type.name}</li>
+            ))
+          }
+        </ul>
       </div>
     </div>
-    <div class="moves">
-      <!-- Level-up Moves Table -->
-      <div>
-        <h2>Level-Up Moves</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Move</th>
-              <th>Type</th>
-              <th>Power</th>
-              <th>Class</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              levelUpMoves.map((move) => (
-                <tr>
-                  <td>{move.name}</td>
-                  <td>
-                    <span class={`type-${move.type}`}>{move.type}</span>
-                  </td>
-                  <td>{move.power ?? "-"}</td>
-                  <td>
-                    <span class={`move-${move.class}`}>{move.class}</span>
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
+    <div class="detail-main">
+      <div class="detail-right">
+        <div class="detail-image">
+          <button
+            class="container"
+            onClick={() => new Audio(pokemon.cries?.latest).play()}
+          >
+            <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+          </button>
+
+          <img
+            class="container detail-shiny"
+            src={pokemon.sprites.front_shiny}
+            alt={`${pokemon.name} shiny`}
+          />
+        </div>
       </div>
-      <div>
-        <!-- TM/HM Moves Table -->
-        <h2>TM/HM Moves</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Move</th>
-              <th>Type</th>
-              <th>Power</th>
-              <th>Class</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              machineMoves.map((move) => (
-                <tr>
-                  <td>{move.name}</td>
-                  <td>
-                    <span class={`type-${move.type}`}>{move.type}</span>
-                  </td>
-                  <td>{move.power ?? "-"}</td>
-                  <td>
-                    <span class={`move-${move.class}`}>{move.class}</span>
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
+
+      <div class="detail-left">
+        <div class="detail-general container">
+          <div class="detail-hg-wg">
+            <div class="height">
+              <p>Height</p>
+              <p>{pokemon.height / 10} m</p>
+            </div>
+            <div class="weight">
+              <p>Weight</p>
+              <p>{pokemon.weight / 10} kg</p>
+            </div>
+          </div>
+          <div class="abilities">
+            <p>Abilities</p>
+            <ul>
+              {pokemon.abilities?.map((a) => <li>{a.ability.name}</li>)}
+            </ul>
+          </div>
+        </div>
+
+        <div class="detail-evolution">
+          {
+            evolutionData.map((evo) => (
+              <a href={`/pokemon/${evo.name}`}>
+                <img src={evo.sprite} alt={evo.name} />
+              </a>
+            ))
+          }
+        </div>
       </div>
     </div>
   </div>
 </DefaultLayout>
 
 <style>
+  /* Voorbeeld styling: https://www.instagram.com/reel/DXWxnvOjKeJ/?igsh=bW9kdzFqMjRlMnR5 */
+
+
   .pokemon-info {
-    max-width: 75%;
-    margin: 0 auto;
-    padding: 5rem;
+    padding: 2rem 0;
+    border: 5px solid var(--detail-container-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 5rem auto;
+    max-width: 80%;
+    border-radius: 0.5rem;
+    transform-origin: center;
+    animation: pokedex-intro 700ms ease-out forwards;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
+        linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
+        linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
+      z-index: -1;
+    }
   }
 
-  .basic-info {
-    display: grid;
-    grid-template-columns: 40% 1fr 1fr;
-    grid-template-rows: repeat(3, 5rem);
+  @keyframes pokedex-intro {
+    0% {
+      transform: scaleX(0.2) scaleY(0.05);
+      opacity: 0;
+    }
+
+    35% {
+      transform: scaleX(1) scaleY(0.05);
+      opacity: 1;
+    }
+
+    65% {
+      transform: scaleX(1) scaleY(0.05);
+    }
+
+    100% {
+      transform: scaleX(1) scaleY(1);
+    }
+  }
+
+  /* ===================== */
+  /* TOP SECTION */
+  /* ===================== */
+
+  .detail-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 1rem;
+  }
+
+  .detail-name {
+    position: relative;
+    display: flex;
     align-items: center;
-    color: white;
+    justify-content: center;
+    gap: 1rem;
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    font-weight: bold;
+    height: 6rem;
+    width: min(50%, 100%);
+    corner-shape: bevel;
+    border-radius: 0 6rem 0 0;
+    overflow: hidden;
 
     h1 {
-      grid-column: 2 / 3;
-      grid-row: 0 / 1;
+      order: 2;
       text-transform: capitalize;
-      font-size: 5rem;
+      font-size: inherit;
+    }
+  }
+
+  /* ===================== */
+  /* TYPES */
+  /* ===================== */
+
+  .detail-types {
+    height: 6rem;
+    width: clamp(10rem, 25%, 18rem);
+    corner-shape: bevel;
+    border-radius: 0 0 0 6rem;
+    overflow: hidden;
+
+    ul {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      align-items: center;
+      list-style: none;
+      height: 100%;
+      padding: 1rem;
+      margin: 0;
+
+      li {
+        font-size: clamp(0.9rem, 2vw, 1.5rem);
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  /* =========== */
+  /* MAIN LAYOUT */
+  /* =========== */
+
+  .detail-main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* ===================== */
+  /* GENERAL INFO CARD */
+  /* ===================== */
+
+  .detail-general {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    corner-shape: bevel;
+    border-radius: 0 0 0 30rem;
+    padding: 2rem;
+    align-items: flex-end;
+
+    .detail-hg-wg {
+      display: flex;
+      gap: 5rem;
+
+      div {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    p {
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
     }
 
     p:first-of-type {
-      font-size: 2rem;
+      font-weight: bold;
+      font-size: clamp(1.5rem, 2vw, 3rem);
+    }
+
+    li {
+      list-style: none;
+      text-transform: capitalize;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+    }
+  }
+
+  /* ===================== */
+  /* EVOLUTION */
+  /* ===================== */
+
+  .detail-evolution {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    text-decoration: none;
+    width: 100%;
+    
+
+    a {
+      position: relative;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 1rem;
+        aspect-ratio: 1;
+        background: var(--detail-container-bg);
+        border: 5px solid var(--detail-container-border);
+        border-radius: 50%;
+        z-index: 0;
+      }
     }
 
     img {
-      height: 100%;
-      grid-column: 1 / 2;
-      grid-row: 1 / 4;
-    }
-
-    p:not(:first-of-type) {
-      font-size: 2rem;
-    }
-
-    ul {
-      grid-column: 2 / 4;
-
-      li {
-        font-size: 2rem;
-      }
+      width: 10rem;
+      aspect-ratio: 1;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
     }
   }
 
-  .cry-evolution {
-    display: grid;
-    grid-template-columns: 40% 1fr;
-    justify-content: space-between;
-    width: 100%;
-    margin: 2rem 0;
-    color: white;
+  /* ===================== */
+  /* IMAGE SECTION */
+  /* ===================== */
+
+  .detail-right {
+    position: relative;
+    margin: 2rem;
 
     button {
       border-radius: 50%;
+      width: 100%;
       aspect-ratio: 1;
-      width: 5rem;
-      background: var(--color-accent);
+
+      img {
+        width: 80%;
+      }
     }
   }
 
-  .moves {
-    h2 {
-      color: white;
-      margin-bottom: 1rem;
-    }
+  .detail-shiny {
+    border-radius: 50%;
+    width: 30%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  /* ===================== */
+  /* CONTAINER STYLE */
+  /* ===================== */
 
-    table {
-      background: var(--color-background);
-      color: white;
-      text-transform: capitalize;
-
-      td:not(:has(span)) {
-        padding: 0.5rem 0.25rem;
-      }
-
-      td {
-        border: 2px solid var(--color-background);
-        background: var(--color-accent);
-
-        span {
-          min-width: 4rem;
-          min-height: 2rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-      
-      
-
-    }
+  .pokemon-info .container {
+    background: var(--detail-container-bg);
+    border: 5px solid var(--detail-container-border);
   }
 </style>

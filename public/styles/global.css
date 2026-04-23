@@ -26,13 +26,6 @@
     --color-steel: #B7B7CE;
     --color-fairy: #D685AD;
 
-    --color-move-physical-bg: #f75231;
-    --color-move-physical-text: #ffc631;
-    --color-move-special-bg: #5273ad;
-    --color-move-special-text: #c6deff;
-    --color-move-status-bg: #ada594;
-    --color-move-status-text: #ffffff;
-
     --color-background: #2f2a2a;
     --color-accent: #363636;
     --color-pokeball: #FF0000;
@@ -43,6 +36,13 @@
     --color-blue-light: #2196F3;
     --color-blue-dark: #1976D2;
 
+    --detail-container-bg: #aae2f4ac;
+    --detail-container-border: #bfecf7;
+
+    --detail-bg-light: #92c8f8;
+    --detail-bg-normal: #79b4f6;
+    --detail-bg-dark: #7da9dc;
+
     --font-jost: "Jost", sans-serif;
 }
 
@@ -50,6 +50,10 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+button, a {
+    cursor: pointer;
 }
 
 body {

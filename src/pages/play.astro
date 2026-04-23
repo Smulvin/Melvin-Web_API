@@ -257,7 +257,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         position: absolute;
         transform: translate(-50%, -50%);
         padding: 7rem;
-        cursor: pointer;
         opacity: 0;
       }
     }
@@ -294,7 +293,8 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     }
 
     .team-item {
-      background: var(--color-blue-light);
+      background: var(--detail-container-bg);
+      border: 3px solid var(--detail-container-border);
       border-radius: 50%;
     }
 
@@ -307,7 +307,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       background: var(--color-green);
       padding: 1rem 2rem;
       border-radius: 50px;
-      cursor: pointer;
       border: 5px solid white;
       font-weight: bold;
       font-size: 2rem;
