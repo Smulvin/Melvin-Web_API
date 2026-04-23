@@ -253,3 +253,6 @@ In de ochtend begonnen we met een workshop over het online zetten van je website
 
 <img src="Assets/README_imgs/Dag6_AR_Team.png">
 <img src="Assets/README_imgs/Dag6_AR_Start.png">
+
+#### Checkout met Dylan
+Dylan is vandaag begonnen met het online zetten van zijn website op render. Dit had een paar problemen omdat zijn canvas het niet deed. De rest van de dag is hij vooral bezig geweest met dingen repareren. Zo deed zijn localstorage het niet meer, en deed zijn randomizer moeilijk. Ook is hij bezig geweest met styling. Zo heeft hij zijn overview pagina een meer science thema gegeven en heeft hij zijn detailpagina in de stijl van een pokemon kaart gemaakt. Zelf wil ik morgne ook bezig met mijn detailpagina styling.
