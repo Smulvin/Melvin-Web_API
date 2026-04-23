@@ -258,5 +258,11 @@ In de ochtend begonnen we met een workshop over het online zetten van je website
 Dylan is vandaag begonnen met het online zetten van zijn website op render. Dit had een paar problemen omdat zijn canvas het niet deed. De rest van de dag is hij vooral bezig geweest met dingen repareren. Zo deed zijn localstorage het niet meer, en deed zijn randomizer moeilijk. Ook is hij bezig geweest met styling. Zo heeft hij zijn overview pagina een meer science thema gegeven en heeft hij zijn detailpagina in de stijl van een pokemon kaart gemaakt. Zelf wil ik morgne ook bezig met mijn detailpagina styling.
 
 ### Dag 7: Donderdag 23 - 4 - 2026
+Vandaag heb ik gewerkt aan de detailpagina van mijn pokémon. Ik liep een beetje vast met hoe ik dat wilde doen, maar kwam toen in de trein iets tegen op Instagram. De link naar die post staat hieronder. Daar heb ik veel inspiratie uit gehaald. In eerste instantie probeerde ik hem 1 op 1 na te maken, maar ik kwam al snel tegen responsive problemen aan. Cyd had aangeraden om iets te proberen met SVGs, maar de containers, maar daar kwam ik niet goed uit. Later was het gelukt met corner-shape bevel. Ik ben wel meer tevreden al over de nieuwe styling, maar ik denk dat er wel nog op te verbeteren is. Ik kan er later nog even naar kijken om wat punten op de i te zetten. Ik heb ook nog een klein beetje styling veranderd van de pokemon in je team tijdens AR. Ik heb voornamelijk de stijl overgenomen van de detailpagina.
 
+<img src="Assets/README_imgs/Dag7_EersteDetailPagina.png">
+<img src="Assets/README_imgs/Dag7_TweedeDetailPagina.png">
 https://www.instagram.com/reel/DXWxnvOjKeJ/?igsh=bW9kdzFqMjRlMnR5
+
+#### Checkout met Mila
+Vandaag checkout met Mila gedaan, zij had een website waarbij je tarot cards kan trekken. In eerste instantie probeerde ze dit met drag en drop, dat werkte helaas niet. Daarna heeft ze het met pointer-events gedaan, dat lukte een stuk beter. Tijdens de checkout werkte er ook iets anders meteen wel. Er was namelijk nog een ander probleem met die API waar ze tegenaan liep. Ze wil nog een homepagina en detailpagina's toevoegen.
