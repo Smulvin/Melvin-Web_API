@@ -284,3 +284,6 @@ Ook heb ik deze week de styling voor mijn detailpagina gedaan. Ik had iets gevon
 - Favicon
 - Nog kijken naar extra effectjes zoals particles in AR
 - Clippath gebruiken voor de animatie op detailpagina
+- Kijken naar groeperen van dingen op detail, want shiny leek nu te horen bij evolutions.
+
+Vandaag meteen gewerkt aan de borders fixen van de detail pagina zodat ze niet dubbel zijn en een clippath gebruikt voor detailpagina, ziet er meteen stuk cleaner uit. Voor de shiny aan de andere kant van de grote pokemon op detail gezet zodat hij minder bij de evolutions lijkt te horen. TItel van overview veranderd. Plus en minnetje buttons iets kleiner gemaakt. 

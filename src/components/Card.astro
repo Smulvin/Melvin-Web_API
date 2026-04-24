@@ -5,73 +5,109 @@ const { pokemonName } = Astro.props;
 let pokemon = null;
 
 try {
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+  const res = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`,
+  );
   pokemon = await res.json();
 } catch (err) {
   console.error("Error fetching Pokémon:", err);
 }
 ---
 
-{pokemon && (
-  <a href={`/pokemon/${pokemon.name}`} class="card-link">
-    <div class="card">
-      
-      <img
-        src={pokemon.sprites.other['official-artwork'].front_default}
-        alt={pokemon.name}
-        class="image"
-      />
+{
+  pokemon && (
+    <a href={`/pokemon/${pokemon.name}`} class="card-link">
+      <div class="card">
+        <img
+          src={pokemon.sprites.other["official-artwork"].front_default}
+          alt={pokemon.name}
+          class="image"
+        />
 
+        <h2 class="title">{pokemon.name}</h2>
 
-      <h2 class="title">
-        {pokemon.name}
-      </h2>
-
-      <div class="types">
-        {pokemon.types.map((typeObj) => (
-          <span class={`type type-${typeObj.type.name}`}>
-            {typeObj.type.name}
-          </span>
-        ))}
-      </div>
-      <button
-        class="add-btn"
-        onclick={`event.stopPropagation(); event.preventDefault(); addToTeam({
+        <div class="types">
+          {pokemon.types.map((typeObj) => (
+            <span class={`type type-${typeObj.type.name}`}>
+              {typeObj.type.name}
+            </span>
+          ))}
+        </div>
+        <button
+          class="add-btn"
+          onclick={`event.stopPropagation(); event.preventDefault(); addToTeam({
           name: '${pokemon.name}',
           image: '${pokemon.sprites.other["official-artwork"].front_default}'
         })`}
-      >
-        <i class="fa-solid fa-plus"></i>
-      </button>
-    </div>
-  </a>
-)}
+        >
+          <i class="fa-solid fa-plus" />
+        </button>
+      </div>
+    </a>
+  )
+}
 
 <style>
   .card-link {
     text-decoration: none;
   }
 
-  .card {
-    max-width: 180px;
-    border-radius: 16px;
-    box-shadow: 0 5px 15px #0000001a;
-    padding: 1rem;
-    transition: 0.5s;
-    color: white;
-    background: var(--color-accent);
-    position: relative;
+.card {
+  max-width: 180px;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px #0000001a;
+  padding: 1rem;
+  transition: all 0.5s ease;
+  color: white;
+  background: var(--color-accent);
+  position: relative;
+}
 
-    button {
-      background: var(--color-green);
-      top: -15px;
-      right: -15px;
-    }
-  }
+/* Center button */
+.card::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 6px solid black;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.4s ease;
+  z-index: 2;
+}
 
-  .card:hover {
-    scale: 1.1;
-    transition: 0.5s;
+.card:hover {
+  border-radius: 30%;
+  color: black;
+
+  background:
+    /* center black band */
+    linear-gradient(
+      to bottom,
+      transparent 45%,
+      black 45% 55%,
+      transparent 55%
+    ),
+    /* top red / bottom white */
+    linear-gradient(
+      to bottom,
+      var(--color-pokeball) 0 50%,
+      white 50% 100%
+    );
+}
+
+/* show the button */
+.card:hover::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+  .card button {
+    background: var(--color-green);
+    top: -5px;
+    right: -5px;
   }
 
   .image {
@@ -79,6 +115,8 @@ try {
     aspect-ratio: 1;
     display: block;
     margin: 0 auto;
+    position: relative;
+    z-index: 3;
   }
 
   .title {
@@ -88,6 +126,4 @@ try {
     text-transform: capitalize;
     font-size: 1.25rem;
   }
-
-
 </style>

@@ -32,7 +32,7 @@
     --color-pokeball-bottom: #FFFFFF;
 
     --color-green: #4CAF50;
-    --color-red: #F44336;
+    --color-red: #FF0000;
     --color-blue-light: #2196F3;
     --color-blue-dark: #1976D2;
 
@@ -80,13 +80,12 @@ body {
 
 .remove-btn, .add-btn{
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 2.5rem;
     aspect-ratio: 1;
     border-radius: 50%;
     border: 2px solid white;
     color: white;
-    font-size: 2rem;
+    font-size: 1.6rem;
 
     &:hover {
         cursor: pointer;   
