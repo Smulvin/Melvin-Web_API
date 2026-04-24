@@ -271,3 +271,16 @@ Vandaag checkout met Mila gedaan, zij had een website waarbij je tarot cards kan
 Deze week ben ik voornamelijk bezig geweest met styling en iets minder op functionaliteit. Zo ben ik begonnen met het beter styling van de AR functionaliteit. Ik had hier namelijk eerst 2 losse knoppen nog voor. Eentje om de camera te starten en eentje om te wisselen van pokemon die in AR stond. Alleen ging je op die manier alleen gewoon door je team heen zonder dat je makkelijk iets kon kiezen. Dus heb ik een aparte overlay knop gemaakt zodat je op die manier je team kan zien en gewoon direct kan kiezen wie je wilt. De styling daarvan heb ik ook een beetje gedaan, maar ik ben er nog niet tevreden over. Het team valt namelijk nog een klein beetje buiten de overlay, de pokeball knop vind ik nog niet mooi genoeg en de pokémon kunnen zelf ook nog wel wat mooier. Verder had ik ook de startknop onderdeel gemaakt van de overlay en heb deze gestyled op dezelfde manier als de start knop die rechts in het teampaneel zit, voor consistentie.
 
 Ook heb ik deze week de styling voor mijn detailpagina gedaan. Ik had iets gevonden op instagram wat ik er goed uit vond zien, dus heb daar veel inspiratie uit genomen. Het was wel een beetje lastig om het goed vorm te geven zodat het ook compleet responsive is, daarom ben ik qua layout ook een beetje afgeweken van het originele design en heb vooral voor kleurencontrast, en container vorming inspiratie genomen. Het was lastig om het goed responsive te krijgen, maar is nu wel redelijk gelukt. Er moeten nu alleen nog wat puntjes op de i komen.
+
+### Voortgangsgesprek
+- Nog kijken naar skeleton loading
+- Overview pagina meer op detailpagina laten lijken
+- Detailpagina kijken naar buitenkant border zodat het geen dubbele borders worden
+- Meerdere pokemon in AR laten zien
+- icoon - en + kunnen kleiner
+- responsive maken van team paneel
+- hover nog beter maken van overview pagina
+- Duidelijker wat je kan doen op de overview pagina, h1 aanpassen?
+- Favicon
+- Nog kijken naar extra effectjes zoals particles in AR
+- Clippath gebruiken voor de animatie op detailpagina
