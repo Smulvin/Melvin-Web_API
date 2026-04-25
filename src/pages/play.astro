@@ -12,6 +12,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
     <!-- Overlay layer -->
     <div class="overlay">
       <img id="pokemon" src="" />
+      <div id="particles"></div>
 
       <button id="team-toggle" class="team-toggle">
         <div></div>
@@ -73,15 +74,22 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
     const getValidTeam = () => team.filter(Boolean);
 
-    async function fetchPokemonSprite(pokemon) {
+    async function fetchPokemonData(pokemon) {
       try {
         const res = await fetch(
           `https://pokeapi.co/api/v2/pokemon/${pokemon.name || pokemon.id}`,
         );
         const data = await res.json();
-        return data.sprites.front_default;
+
+        return {
+          sprite: data.sprites.front_default,
+          type: data.types[0].type.name, // 👈 primary type
+        };
       } catch {
-        return pokemon.image;
+        return {
+          sprite: pokemon.image,
+          type: "normal",
+        };
       }
     }
 
@@ -91,12 +99,14 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
       selectedPokemonIndex %= validTeam.length;
 
-      const spriteUrl = await fetchPokemonSprite(
+      const { sprite, type } = await fetchPokemonData(
         validTeam[selectedPokemonIndex],
       );
 
       pokemonImage.style.display = "block";
-      pokemonImage.src = spriteUrl;
+      pokemonImage.src = sprite;
+
+      triggerParticles(type);
     }
 
     teamToggleButton.onclick = () => {
@@ -115,11 +125,11 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       for (let i = 0; i < validTeam.length; i++) {
         const pokemon = validTeam[i];
 
-        const spriteUrl = await fetchPokemonSprite(pokemon);
+        const { sprite } = await fetchPokemonData(pokemon);
 
         const spriteImg = document.createElement("img");
         spriteImg.className = "team-sprite";
-        spriteImg.src = spriteUrl;
+        spriteImg.src = sprite;
 
         const menuItem =
           teamItemTemplate.content.firstElementChild.cloneNode(true);
@@ -225,6 +235,95 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
       updateDisplayedPokemon();
     };
+
+    // ─────────────────────────────
+    // 5. PARTICLES
+    // ─────────────────────────────
+
+    // ChatGPT heeft geholpen deze functie te schrijven, eerst had ik hem gevraagd om hem alleen te maken, daarna om hem aan te passen zodat ik makkelijker de waardes kon aanpassen
+    // Prompp 1: Create a particles system that shoots out of the center of the pokemon like a burst in the color of their primary typing.
+    // Prompt 2: Could you change the function so that I have a clear list at the top for tweaking the particles? THink about lifetime, amount, size, speed.
+    function getTypeColor(type) {
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue(`--color-${type}`)
+        .trim();
+
+      return value || "#ff0000";
+    }
+
+    function triggerParticles(type) {
+      // ─────────────────────────────
+      // 🎛️ PARTICLE CONFIG (tweak here)
+      // ─────────────────────────────
+      const PARTICLE_CONFIG = {
+        count: 50, // how many particles
+        size: 30, // px
+        lifetime: 600, // ms (must match animation + cleanup)
+        spread: 300, // max explosion radius
+        minSpread: 100, // min explosion radius
+        zIndex: 9999,
+        easing: "ease-out",
+        alphaStart: 1,
+        alphaEnd: 0,
+        scaleEnd: 0.3,
+      };
+
+      const container = document.getElementById("particles");
+      container.innerHTML = "";
+
+      const color = getTypeColor(type);
+
+      const rect = pokemonImage.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      const centerX = rect.left - containerRect.left + rect.width / 2;
+      const centerY = rect.top - containerRect.top + rect.height / 2;
+
+      for (let i = 0; i < PARTICLE_CONFIG.count; i++) {
+        const particle = document.createElement("div");
+
+        // base styling
+        particle.style.position = "absolute";
+        particle.style.width = `${PARTICLE_CONFIG.size}px`;
+        particle.style.height = `${PARTICLE_CONFIG.size}px`;
+        particle.style.borderRadius = "50%";
+        particle.style.background = color;
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+        particle.style.pointerEvents = "none";
+        particle.style.zIndex = PARTICLE_CONFIG.zIndex;
+
+        container.appendChild(particle);
+
+        // movement math
+        const angle = Math.random() * Math.PI * 2;
+        const distance =
+          Math.random() * (PARTICLE_CONFIG.spread - PARTICLE_CONFIG.minSpread) +
+          PARTICLE_CONFIG.minSpread;
+
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        particle.animate(
+          [
+            {
+              transform: "translate(0,0) scale(1)",
+              opacity: PARTICLE_CONFIG.alphaStart,
+            },
+            {
+              transform: `translate(${x}px, ${y}px) scale(${PARTICLE_CONFIG.scaleEnd})`,
+              opacity: PARTICLE_CONFIG.alphaEnd,
+            },
+          ],
+          {
+            duration: PARTICLE_CONFIG.lifetime,
+            easing: PARTICLE_CONFIG.easing,
+          },
+        );
+
+        setTimeout(() => particle.remove(), PARTICLE_CONFIG.lifetime);
+      }
+    }
   </script>
 
   <style>
@@ -267,6 +366,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      z-index: 5;
       transition:
         left 0.1s linear,
         top 0.1s linear;

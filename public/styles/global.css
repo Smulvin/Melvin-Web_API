@@ -1,7 +1,7 @@
 /* Source: https://fonts.google.com/specimen/Jost */
 @font-face {
     font-family: "Jost";
-    src:url("../public/Jost-Regular.ttf") format("truetype");
+    src:url("../Jost-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }

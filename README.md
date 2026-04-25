@@ -285,5 +285,159 @@ Ook heb ik deze week de styling voor mijn detailpagina gedaan. Ik had iets gevon
 - Nog kijken naar extra effectjes zoals particles in AR
 - Clippath gebruiken voor de animatie op detailpagina
 - Kijken naar groeperen van dingen op detail, want shiny leek nu te horen bij evolutions.
+- Manier om naar volgende of vorige te gaan in de pokedex
+- Geen alert gebruiken (bijvoorbeeld wanneer team vol)
+- Duidelijk maken dat Pokémon in je team gaat
 
 Vandaag meteen gewerkt aan de borders fixen van de detail pagina zodat ze niet dubbel zijn en een clippath gebruikt voor detailpagina, ziet er meteen stuk cleaner uit. Voor de shiny aan de andere kant van de grote pokemon op detail gezet zodat hij minder bij de evolutions lijkt te horen. TItel van overview veranderd. Plus en minnetje buttons iets kleiner gemaakt. 
+
+Vandaag ben ik meteen aan verschillende dingen gaan werken, want ik had veel tijd voordat ik mijn andere gesprek had. Als eerste heb ik de border van de detailpagina gefixt zodat ze niet dubbel zijn en heb een clippath gebruikt voor de animatie zodat hij wat cleaner is. Om de groepering wat duidelijker te maken op de detailpagina heb ik voor nu de shiny aan de andere kant van de image gezet, dan lijkt hij minder bij de evolutions te horen. Op de overview pagina heb ik de titel veranderd zodat hij duidelijker is, heb ik de + en - icoontjes wat kleiner gemaakt en heb ik een nieuwe hover gemaakt. Dit idee had ik eerder al, maar ik wilde ook de overview pagina meer styling zoals de detailpagina. Dus hij moet waarschijnlijk nog anders.
+
+<img src="Assets/README_imgs/Meivakantie_NieuweHover.png">
+
+## Meivakantie
+Waar ik de vakantie aan wil werken:
+- Skeleton loading
+- Overview pagina meer op detailpagina laten lijken
+- Meerdere pokemon in AR kunnen neerzetten
+- Teampaneel AR beter vormgeven
+- Betere hover voor overview pagina
+- Favicon
+- Particle system voor AR effect
+- Max width op team sidepanel
+- Manier om naar volgende of vorige te gaan in de pokedex
+- Geen alert gebruiken (bijvoorbeeld wanneer team vol)
+- Duidelijk maken dat pokemon in je team gaat.
+- AR pokemon schalen aan de hand van schermformaat, responsive
+
+### Hulp van ChatGPT
+Ik had ChatGPT gevraagd om het particle systeem te maken. Het ophalen van de uit de root was zelf gelukt maar ik kreeg het niet zelf voor elkaar een mooie particles system te creëeren. Probeerde dat eerst met CSS, maar had te veel onderdelen uit de JS nodig om het te maken. Bij beide prompts gaf ik een stuk code mee als context.
+Prompt: Create a particles system that shoots out of the center of the pokemon like a burst in the color of their primary typing.
+```
+function triggerParticles(type) {
+      const container = document.getElementById("particles");
+      container.innerHTML = "";
+
+      const color = getTypeColor(type);
+
+      const rect = pokemonImage.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      const centerX = rect.left - containerRect.left + rect.width / 2;
+      const centerY = rect.top - containerRect.top + rect.height / 2;
+
+      for (let i = 0; i < 25; i++) {
+        const particle = document.createElement("div");
+
+        particle.style.position = "absolute";
+        particle.style.width = "10px";
+        particle.style.height = "10px";
+        particle.style.borderRadius = "50%";
+        particle.style.background = color;
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+        particle.style.pointerEvents = "none";
+        particle.style.zIndex = "9999";
+
+        container.appendChild(particle);
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 80 + 30;
+
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        particle.animate(
+          [
+            { transform: "translate(0,0)", opacity: 1 },
+            { transform: `translate(${x}px, ${y}px)`, opacity: 0 },
+          ],
+          {
+            duration: 600,
+            easing: "ease-out",
+          },
+        );
+
+        setTimeout(() => particle.remove(), 600);
+      }
+    }
+```
+Daarna heb ik gevraagd of hij hem zo kon veranderen dat ik makkelijk waardes kan aanpassen voor het gewenste particle effect
+Prompt: Could you change the function so that I have a clear list at the top for tweaking the particles? THink about lifetime, amount, size, speed.
+```
+function triggerParticles(type) {
+  // ─────────────────────────────
+  // 🎛️ PARTICLE CONFIG (tweak here)
+  // ─────────────────────────────
+  const PARTICLE_CONFIG = {
+    count: 25,              // how many particles
+    size: 10,               // px
+    lifetime: 600,          // ms (must match animation + cleanup)
+    spread: 80,            // max explosion radius
+    minSpread: 30,         // min explosion radius
+    zIndex: 9999,
+    easing: "ease-out",
+    alphaStart: 1,
+    alphaEnd: 0,
+    scaleEnd: 0.3,
+  };
+
+  const container = document.getElementById("particles");
+  container.innerHTML = "";
+
+  const color = getTypeColor(type);
+
+  const rect = pokemonImage.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+
+  const centerX = rect.left - containerRect.left + rect.width / 2;
+  const centerY = rect.top - containerRect.top + rect.height / 2;
+
+  for (let i = 0; i < PARTICLE_CONFIG.count; i++) {
+    const particle = document.createElement("div");
+
+    // base styling
+    particle.style.position = "absolute";
+    particle.style.width = `${PARTICLE_CONFIG.size}px`;
+    particle.style.height = `${PARTICLE_CONFIG.size}px`;
+    particle.style.borderRadius = "50%";
+    particle.style.background = color;
+    particle.style.left = `${centerX}px`;
+    particle.style.top = `${centerY}px`;
+    particle.style.pointerEvents = "none";
+    particle.style.zIndex = PARTICLE_CONFIG.zIndex;
+
+    container.appendChild(particle);
+
+    // movement math
+    const angle = Math.random() * Math.PI * 2;
+    const distance =
+      Math.random() *
+        (PARTICLE_CONFIG.spread - PARTICLE_CONFIG.minSpread) +
+      PARTICLE_CONFIG.minSpread;
+
+    const x = Math.cos(angle) * distance;
+    const y = Math.sin(angle) * distance;
+
+    particle.animate(
+      [
+        {
+          transform: "translate(0,0) scale(1)",
+          opacity: PARTICLE_CONFIG.alphaStart,
+        },
+        {
+          transform: `translate(${x}px, ${y}px) scale(${PARTICLE_CONFIG.scaleEnd})`,
+          opacity: PARTICLE_CONFIG.alphaEnd,
+        },
+      ],
+      {
+        duration: PARTICLE_CONFIG.lifetime,
+        easing: PARTICLE_CONFIG.easing,
+      }
+    );
+
+    setTimeout(() => particle.remove(), PARTICLE_CONFIG.lifetime);
+  }
+}
+```
+

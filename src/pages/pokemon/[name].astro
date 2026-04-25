@@ -125,6 +125,10 @@ const evolutionData = extractEvolutions(evoData.chain);
   .pokemon-info {
     padding: 2rem 0;
     border: 5px solid var(--detail-container-border);
+    background:
+        linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
+        linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
+        linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -134,17 +138,6 @@ const evolutionData = extractEvolutions(evoData.chain);
     transform-origin: center;
     animation: pokedex-intro 700ms ease-out forwards;
     position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
-        linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
-        linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
-      z-index: -1;
-    }
   }
 
   @keyframes pokedex-intro {
