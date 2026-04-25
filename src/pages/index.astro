@@ -1,12 +1,9 @@
 ---
 // @ts-nocheck
-
 import Card from "../components/Card.astro";
-
 import DefaultLayout from "../layouts/DefaultLayout.astro";
+import { POKEMON_URL } from "./shared.js";
 
-// Fetch first 151 Pokémon
-import {POKEMON_URL} from "./shared.js"
 const res = await fetch(POKEMON_URL);
 const data = await res.json();
 const pokemonList = data.results;
@@ -16,7 +13,9 @@ const pokemonList = data.results;
   <h1>Create your Pokémon Team!</h1>
 
   <div class="overview-grid">
-    {pokemonList.map((pokemon) => <Card pokemonName={pokemon.name} />)}
+    {pokemonList.map((pokemon) => (
+      <Card pokemonName={pokemon.name} />
+    ))}
   </div>
 </DefaultLayout>
 

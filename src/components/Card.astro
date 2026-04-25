@@ -47,6 +47,39 @@ try {
   )
 }
 
+<script>
+  // @ts-nocheck
+  function handleMove(e) {
+  const card = e.currentTarget;
+  const rect = card.getBoundingClientRect();
+
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const rotateX = ((y - centerY) / centerY) * -8;
+  const rotateY = ((x - centerX) / centerX) * 8;
+
+  card.style.setProperty("--x", `${(x / rect.width) * 100}%`);
+  card.style.setProperty("--y", `${(y / rect.height) * 100}%`);
+
+  card.style.transform = `
+    perspective(1000px)
+    rotateX(${rotateX}deg)
+    rotateY(${rotateY}deg)
+    scale(1.03)
+  `;
+}
+
+function reset(e) {
+  const card = e.currentTarget;
+  card.style.transform =
+    "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+}
+</script>
+
 <style>
   .card-link {
     text-decoration: none;
@@ -54,9 +87,12 @@ try {
 
   .card {
     max-width: 200px;
-    background: var(--detail-bg-light);
-    border-radius: 1.6rem;
+    background:
+        linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
+        linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
+        linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
     border: 5px solid var(--detail-container-border);
+    border-radius: 1.6rem;
     padding: 1rem 0;
     color: black;
     text-decoration: none;
@@ -71,6 +107,7 @@ try {
       background: var(--detail-container-bg);
       border: 5px solid var(--detail-container-border);
       border-radius: 50%;
+      transition: 0.3s;
     }
 
     h2 {
@@ -79,7 +116,29 @@ try {
       border-left: 0;
       corner-shape: bevel;
       border-radius: 0 0 5rem 0;
-      width: 90%;
+    }
+
+    &:hover img {
+      scale: 1.1;
+      animation: rotate 3s linear infinite;
+      background: linear-gradient(
+        180deg,
+        var(--color-pokeball) 48%,
+        var(--color-pokeball-rim) 48%,
+        var(--color-pokeball-rim) 52%,
+        var(--color-pokeball-bottom) 52%
+      );
+      transition: 0.3s;
+    }
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
     }
   }
 
