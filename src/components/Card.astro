@@ -35,10 +35,13 @@ try {
         </div>
         <button
           class="add-btn"
-          onclick={`event.stopPropagation(); event.preventDefault(); addToTeam({
-          name: '${pokemon.name}',
-          image: '${pokemon.sprites.other["official-artwork"].front_default}'
-        })`}
+          onclick={`event.stopPropagation(); event.preventDefault();
+            addToTeam({
+              name: '${pokemon.name}',
+              image: '${pokemon.sprites.other["official-artwork"].front_default}'
+            });
+            animateAdd(event);
+          `}
         >
           <i class="fa-solid fa-plus" />
         </button>
@@ -47,37 +50,61 @@ try {
   )
 }
 
-<script>
-  // @ts-nocheck
-  function handleMove(e) {
-  const card = e.currentTarget;
-  const rect = card.getBoundingClientRect();
+<template>
+  <img class="flying-image" />
+</template>
 
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+<script is:inline>
+  function animateAdd(e) {
+    const card = e.currentTarget.closest(".card");
+    const template = document.querySelector("template");
 
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
+    if (!card || !template) return;
 
-  const rotateX = ((y - centerY) / centerY) * -8;
-  const rotateY = ((x - centerX) / centerX) * 8;
+    const clone = template.content.firstElementChild.cloneNode(true);
+    document.body.appendChild(clone);
 
-  card.style.setProperty("--x", `${(x / rect.width) * 100}%`);
-  card.style.setProperty("--y", `${(y / rect.height) * 100}%`);
+    const rect = card.getBoundingClientRect();
 
-  card.style.transform = `
-    perspective(1000px)
-    rotateX(${rotateX}deg)
-    rotateY(${rotateY}deg)
-    scale(1.03)
-  `;
-}
+    const startX = rect.left + rect.width / 2 - 64;
+    const startY = rect.top + rect.height / 2 - 64;
 
-function reset(e) {
-  const card = e.currentTarget;
-  card.style.transform =
-    "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-}
+    clone.style.position = "fixed";
+    clone.style.left = `${startX}px`;
+    clone.style.top = `${startY}px`;
+
+    clone.style.background = `url(${card.querySelector("img").src})`;
+    clone.style.backgroundSize = "cover";
+    clone.style.backgroundPosition = "center";
+
+    // POP phase
+    clone.style.transform = "scale(0.8)";
+    clone.style.opacity = "1";
+    clone.style.transition = "transform 0.15s cubic-bezier(.34,1.56,.64,1)";
+
+    clone.getBoundingClientRect(); // force reflow
+
+    clone.style.transform = "scale(1.2)";
+
+    setTimeout(() => {
+      const endX = window.innerWidth + 100;
+      const endY = window.innerHeight / 2 - 64;
+
+      // IMPORTANT: force reflow before switching transition
+      clone.getBoundingClientRect();
+
+      clone.style.transition = "all 0.7s ease";
+      clone.style.left = `${endX}px`;
+      clone.style.top = `${endY}px`;
+      clone.style.opacity = "0";
+      clone.style.transform = "scale(0.6)";
+
+      clone.addEventListener("transitionend", (event) => {
+        if (event.propertyName !== "opacity") return;
+        clone.remove();
+      });
+    }, 150);
+  }
 </script>
 
 <style>
@@ -163,5 +190,14 @@ function reset(e) {
     margin-top: 0.5rem;
     text-transform: capitalize;
     font-size: 1.25rem;
+  }
+
+  .flying-image {
+    position: fixed;
+    width: 128px;
+    aspect-ratio: 1;
+    pointer-events: none;
+    z-index: 9999;
+    background-size: cover;
   }
 </style>

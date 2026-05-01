@@ -310,6 +310,8 @@ Waar ik de vakantie aan wil werken:
 - Duidelijk maken dat pokemon in je team gaat.
 - AR pokemon schalen aan de hand van schermformaat, responsive
 
+In de meivakantie heb ik aan meerdere dingen gewerkt, zo ben ik begonnen met een paar simpele dingetjes, zoals een favicon, de overviewpagina anders stylen met ook een betere hover, een max-width op het teampaneel. Maar ook heb ik gewerkt aan wat groter dingen. Zoals het maken van een particle system. Hier had ik wel even wat moeite mee namelijk en kwam er nooit zo uit zoals ik het wilde hebben. Ik heb het uiteindelijk aan AI gevraagd, en daarna gevraagd of hij het iets anders kon opbouwen zodat ik makkelijker kon spelen met de waardes. Later heb ik de particles nog sterretjes gemaakt in plaats van rondjes. Ook heb ik later in de vakantie nog gewerkt aan een animatie om duidelijker te maken dat je pokemon in je team gaat. Was ook weer even lastig, maar om het werkend te krijgen moest ik ook veel styling via javascript doen, wat niet fijn voelde.
+
 ### Hulp van ChatGPT
 Ik had ChatGPT gevraagd om het particle systeem te maken. Het ophalen van de uit de root was zelf gelukt maar ik kreeg het niet zelf voor elkaar een mooie particles system te creëeren. Probeerde dat eerst met CSS, maar had te veel onderdelen uit de JS nodig om het te maken. Bij beide prompts gaf ik een stuk code mee als context.
 Prompt: Create a particles system that shoots out of the center of the pokemon like a burst in the color of their primary typing.
