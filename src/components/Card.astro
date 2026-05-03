@@ -36,12 +36,15 @@ try {
         <button
           class="add-btn"
           onclick={`event.stopPropagation(); event.preventDefault();
-            addToTeam({
-              name: '${pokemon.name}',
-              image: '${pokemon.sprites.other["official-artwork"].front_default}'
-            });
+          const success = addToTeam({
+            name: '${pokemon.name}',
+            image: '${pokemon.sprites.other["official-artwork"].front_default}'
+          });
+
+          if (success) {
             animateAdd(event);
-          `}
+          }
+        `}
         >
           <i class="fa-solid fa-plus" />
         </button>

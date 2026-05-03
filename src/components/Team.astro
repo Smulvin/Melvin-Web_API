@@ -12,6 +12,10 @@
   </div>
 </dialogue>
 
+<div id="team-popover" popover>
+  <p>Team is full!</p>
+</div>
+
 <script>
   // @ts-nocheck
 
@@ -21,19 +25,39 @@
     const panel = document.getElementById("team-panel");
     const toggleBtn = document.getElementById("toggle-btn");
     const teamList = document.getElementById("team-list");
+    const popover = document.getElementById("team-popover");
 
-    if (!panel || !toggleBtn || !teamList) return;
+    if (!panel || !toggleBtn || !teamList || !popover) return;
 
+    // -------------------------
+    // PANEL TOGGLE
+    // -------------------------
     toggleBtn.onclick = () => {
       panel.classList.toggle("open");
     };
 
-    // Load team
+    // -------------------------
+    // POPOVER SYSTEM
+    // -------------------------
+    function showPopover(message, color = "var(--color-red)") {
+      popover.style.background = color;
+      popover.querySelector("p").textContent = message;
+
+      popover.showPopover();
+
+      setTimeout(() => {
+        popover.hidePopover();
+      }, 2000);
+    }
+
+    // -------------------------
+    // LOAD TEAM
+    // -------------------------
     const savedTeam = localStorage.getItem("pokemon-team");
+
     if (savedTeam) {
       team = JSON.parse(savedTeam);
 
-      // safety fallback (in case older saves exist)
       if (!Array.isArray(team) || team.length !== 6) {
         team = Array(6).fill(null);
       }
@@ -45,25 +69,36 @@
       localStorage.setItem("pokemon-team", JSON.stringify(team));
     }
 
+    // -------------------------
+    // ADD TO TEAM
+    // -------------------------
     window.addToTeam = (pokemon) => {
       const index = team.findIndex((p) => p === null);
 
       if (index === -1) {
-        alert("Team is full!");
-        return;
+        showPopover("Team is full!");
+        return false;
       }
 
       team[index] = pokemon;
       saveTeam();
       renderTeam();
+
+      return true;
     };
 
+    // -------------------------
+    // REMOVE FROM TEAM
+    // -------------------------
     function removeFromTeam(index) {
       team[index] = null;
       saveTeam();
       renderTeam();
     }
 
+    // -------------------------
+    // RENDER TEAM
+    // -------------------------
     function renderTeam() {
       teamList.innerHTML = "";
 
@@ -74,7 +109,9 @@
           li.innerHTML = `
             <img src="${pokemon.image}" />
             <span>${pokemon.name}</span>
-            <button class="remove-btn"><i class="fa-solid fa-minus"></i></button>
+            <button class="remove-btn">
+              <i class="fa-solid fa-minus"></i>
+            </button>
           `;
 
           li.querySelector(".remove-btn")?.addEventListener("click", () =>
@@ -93,18 +130,17 @@
 <style>
   .panel {
     position: fixed;
-    right: -400px;
+    right: -0;
     top: 50%;
-    transform: translateY(-50%);
-    width: 400px;
-    max-width: calc(100% - 3rem);
+    transform: translate(100%, -50%);
+    width: min(400px, 80vw);
     background: var(--color-blue-light);
     border: 10px solid var(--color-blue-dark);
     border-right: none;
     corner-shape: bevel;
     border-radius: 50px 0 0 50px;
     color: white;
-    transition: right 0.3s;
+    transition: transform 0.3s;
     padding: 1rem;
     z-index: 10;
     font-weight: bold;
@@ -118,20 +154,19 @@
   }
 
   .panel.open {
-    right: 0;
+    transform: translate(0, -50%);
   }
 
   #toggle-btn {
     position: absolute;
     left: -87px;
     top: 50%;
-    transform: translateX(-50%);
+    transform: translateY(-50%) rotate(90deg);
     background: var(--color-blue-light);
     color: white;
     border: 10px solid var(--color-blue-dark);
     border-top: 10px solid var(--color-blue-light);
     font-size: 1.5rem;
-    rotate: 90deg;
     padding: 0.5rem 1rem;
     corner-shape: bevel;
     border-radius: 0px 0px 10px 10px;
@@ -196,5 +231,20 @@
     border-radius: 50px;
     text-align: center;
     text-decoration: none;
+  }
+
+  #team-popover {
+    padding: 1rem 1.5rem;
+    background: var(--color-red);
+    color: white;
+    font-weight: bold;
+    border: 5px solid white;
+    border-radius: 1rem;
+
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
 </style>
