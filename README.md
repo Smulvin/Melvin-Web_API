@@ -313,7 +313,8 @@ Waar ik de vakantie aan wil werken:
 
 In de meivakantie heb ik aan meerdere dingen gewerkt, zo ben ik begonnen met een paar simpele dingetjes, zoals een favicon, de overviewpagina anders stylen met ook een betere hover, een max-width op het teampaneel. Maar ook heb ik gewerkt aan wat groter dingen. Zoals het maken van een particle system. Hier had ik wel even wat moeite mee namelijk en kwam er nooit zo uit zoals ik het wilde hebben. Ik heb het uiteindelijk aan AI gevraagd, en daarna gevraagd of hij het iets anders kon opbouwen zodat ik makkelijker kon spelen met de waardes. Later heb ik de particles nog sterretjes gemaakt in plaats van rondjes. Ook heb ik later in de vakantie nog gewerkt aan een animatie om duidelijker te maken dat je pokemon in je team gaat. Was ook weer even lastig, maar om het werkend te krijgen moest ik ook veel styling via javascript doen, wat niet fijn voelde.
 
-Styling van team in AR aangepast, knop weggehaald
+Styling van team in AR aangepast, knop weggehaald + responsive
+Pokemon in AR scalen adhv schermformaat
 Detail pagina meer responsive
 Geen alert meer, maar een popover
 

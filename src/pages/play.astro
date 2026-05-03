@@ -14,7 +14,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       <img id="pokemon" src="" />
       <div id="particles"></div>
 
-      <div id="team-menu" class="team-menu"></div>
+      <div id="team-menu"></div>
       <template id="team-item-template">
         <div class="team-item">
           <img class="team-sprite" />
@@ -34,286 +34,291 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
   Right now it just places the pokemon sprite on the video overlay, but it is not
   according to the user on the camera. Do you have an Web API that can make that
   happen? Give me the full script  -->
-  <script type="module">
-    import "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js";
-    import "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
+<script type="module">
+  import "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js";
+  import "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
 
-    // ─────────────────────────────
-    // 1. DOM + STATE
-    // ─────────────────────────────
-    const $ = (id) => document.getElementById(id);
+  // ─────────────────────────────
+  // DOM + STATE
+  // ─────────────────────────────
+  const $ = (id) => document.getElementById(id);
 
-    const videoElement = $("video");
-    const startCameraButton = $("start-camera");
+  const videoElement = $("video");
+  const startCameraButton = $("start-camera");
+  const pokemonImage = $("pokemon");
 
-    const pokemonImage = $("pokemon");
+  const teamMenu = $("team-menu");
+  const teamItemTemplate = $("team-item-template");
 
-    const teamMenu = $("team-menu");
-    const teamItemTemplate = $("team-item-template");
+  const positionLeftButton = $("pos-left");
+  const positionRightButton = $("pos-right");
+  const positionTopButton = $("pos-top");
 
-    const positionLeftButton = $("pos-left");
-    const positionRightButton = $("pos-right");
-    const positionTopButton = $("pos-top");
+  let selectedPosition = "right";
+  let selectedPokemonIndex = 0;
 
-    let selectedPosition = "right";
-    let selectedPokemonIndex = 0;
+  positionLeftButton.onclick = () => (selectedPosition = "left");
+  positionRightButton.onclick = () => (selectedPosition = "right");
+  positionTopButton.onclick = () => (selectedPosition = "top");
 
-    positionLeftButton.onclick = () => (selectedPosition = "left");
-    positionRightButton.onclick = () => (selectedPosition = "right");
-    positionTopButton.onclick = () => (selectedPosition = "top");
+  const team = JSON.parse(localStorage.getItem("pokemon-team") || "[]");
+  const getValidTeam = () => team.filter(Boolean);
 
-    // ─────────────────────────────
-    // 2. TEAM + POKÉMON
-    // ─────────────────────────────
-    const team = JSON.parse(localStorage.getItem("pokemon-team") || "[]");
-
-    const getValidTeam = () => team.filter(Boolean);
-
-    async function fetchPokemonData(pokemon) {
-      try {
-        const res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${pokemon.name || pokemon.id}`,
-        );
-        const data = await res.json();
-
-        return {
-          sprite: data.sprites.front_default,
-          type: data.types[0].type.name, // 👈 primary type
-        };
-      } catch {
-        return {
-          sprite: pokemon.image,
-          type: "normal",
-        };
-      }
-    }
-
-    async function updateDisplayedPokemon() {
-      const validTeam = getValidTeam();
-      if (!validTeam.length) return;
-
-      selectedPokemonIndex %= validTeam.length;
-
-      const { sprite, type } = await fetchPokemonData(
-        validTeam[selectedPokemonIndex],
+  // ─────────────────────────────
+  // POKÉMON DATA
+  // ─────────────────────────────
+  async function fetchPokemonData(pokemon) {
+    try {
+      const res = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${pokemon.name || pokemon.id}`
       );
+      const data = await res.json();
 
-      pokemonImage.style.display = "block";
-      pokemonImage.src = sprite;
-
-      triggerParticles(type);
+      return {
+        sprite: data.sprites.front_default,
+        type: data.types[0].type.name,
+      };
+    } catch {
+      return {
+        sprite: pokemon.image,
+        type: "normal",
+      };
     }
+  }
 
+  async function updateDisplayedPokemon() {
+    const validTeam = getValidTeam();
+    if (!validTeam.length) return;
 
-    async function renderTeamMenu() {
-      const validTeam = getValidTeam();
-      teamMenu.innerHTML = "";
+    selectedPokemonIndex %= validTeam.length;
 
-      for (let i = 0; i < validTeam.length; i++) {
-        const pokemon = validTeam[i];
+    const { sprite, type } = await fetchPokemonData(
+      validTeam[selectedPokemonIndex]
+    );
 
-        const { sprite } = await fetchPokemonData(pokemon);
+    pokemonImage.style.display = "block";
+    pokemonImage.src = sprite;
 
-        const spriteImg = document.createElement("img");
-        spriteImg.className = "team-sprite";
-        spriteImg.src = sprite;
+    triggerParticles(type);
+  }
 
-        const menuItem =
-          teamItemTemplate.content.firstElementChild.cloneNode(true);
-        menuItem.querySelector("img").replaceWith(spriteImg);
+  async function renderTeamMenu() {
+    const validTeam = getValidTeam();
+    teamMenu.innerHTML = "";
 
-        menuItem.onclick = () => {
-          selectedPokemonIndex = i;
-          updateDisplayedPokemon();
-        };
+    for (let i = 0; i < validTeam.length; i++) {
+      const pokemon = validTeam[i];
+      const { sprite } = await fetchPokemonData(pokemon);
 
-        teamMenu.appendChild(menuItem);
-      }
-    }
+      const spriteImg = document.createElement("img");
+      spriteImg.className = "team-sprite";
+      spriteImg.src = sprite;
 
-    // ─────────────────────────────
-    // 3. CAMERA + FACE TRACKING
-    // ─────────────────────────────
-    const faceDetection = new window.FaceDetection({
-      locateFile: (file) =>
-        `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
-    });
+      const menuItem =
+        teamItemTemplate.content.firstElementChild.cloneNode(true);
 
-    faceDetection.setOptions({
-      model: "short",
-      minDetectionConfidence: 0.5,
-    });
+      menuItem.querySelector("img").replaceWith(spriteImg);
 
-    faceDetection.onResults(({ detections }) => {
-      if (!detections.length) return;
-
-      const face = detections[0].boundingBox;
-
-      // Face center in percentage of screen
-      const faceCenterX = face.xCenter * 100;
-      const faceCenterY = face.yCenter * 100;
-
-      // Face size in percentage
-      const faceWidthPct = face.width * 100;
-      const faceHeightPct = face.height * 100;
-
-      // Offsets based on face size
-      const sideOffset = faceWidthPct;
-      const eyeLevelOffset = faceHeightPct * 0.5;
-      const aboveHeadOffset = faceHeightPct * 1.6;
-
-      // Position helper buttons around face
-      positionLeftButton.style.left = `${faceCenterX - sideOffset}%`;
-      positionLeftButton.style.top = `${faceCenterY + eyeLevelOffset}%`;
-
-      positionRightButton.style.left = `${faceCenterX + sideOffset}%`;
-      positionRightButton.style.top = `${faceCenterY + eyeLevelOffset}%`;
-
-      positionTopButton.style.left = `${faceCenterX}%`;
-      positionTopButton.style.top = `${faceCenterY - aboveHeadOffset}%`;
-
-      // Pokémon offset depending on selected position
-      let offsetX = 0;
-      let offsetY = 0;
-
-      if (selectedPosition === "left") {
-        offsetX = -sideOffset;
-        offsetY = eyeLevelOffset;
-      }
-
-      if (selectedPosition === "right") {
-        offsetX = sideOffset;
-        offsetY = eyeLevelOffset;
-      }
-
-      if (selectedPosition === "top") {
-        offsetX = 0;
-        offsetY = -aboveHeadOffset;
-      }
-
-      pokemonImage.style.width =
-        selectedPosition === "top"
-          ? `${faceWidthPct * 16}px`
-          : `${faceWidthPct * 20}px`;
-
-      pokemonImage.style.left = `${faceCenterX + offsetX}%`;
-      pokemonImage.style.top = `${faceCenterY + offsetY}%`;
-    });
-
-    // ─────────────────────────────
-    // 4. START CAMERA
-    // ─────────────────────────────
-    startCameraButton.onclick = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-      });
-
-      videoElement.srcObject = stream;
-      await videoElement.play();
-
-      const camera = new window.Camera(videoElement, {
-        onFrame: async () => faceDetection.send({ image: videoElement }),
-      });
-
-      camera.start();
-
-      startCameraButton.style.display = "none";
-      document.querySelector(".overlay").classList.add("ar-active");
-
-      updateDisplayedPokemon();
-      renderTeamMenu();
-    };
-
-    // ─────────────────────────────
-    // 5. PARTICLES
-    // ─────────────────────────────
-
-    // ChatGPT heeft geholpen deze functie te schrijven, eerst had ik hem gevraagd om hem alleen te maken, daarna om hem aan te passen zodat ik makkelijker de waardes kon aanpassen. 
-    // Bij beide prompts gaf ik een stuk code mee als context
-    // Prompp 1: Create a particles system that shoots out of the center of the pokemon like a burst in the color of their primary typing.
-    // Prompt 2: Could you change the function so that I have a clear list at the top for tweaking the particles? THink about lifetime, amount, size, speed.
-    function getTypeColor(type) {
-      const value = getComputedStyle(document.documentElement)
-        .getPropertyValue(`--color-${type}`)
-        .trim();
-
-      return value || "#ff0000";
-    }
-
-    function triggerParticles(type) {
-      // ─────────────────────────────
-      // 🎛️ PARTICLE CONFIG (tweak here)
-      // ─────────────────────────────
-      const PARTICLE_CONFIG = {
-        count: 50, // how many particles
-        size: 100, // px
-        lifetime: 500, // ms (must match animation + cleanup)
-        spread: 600, // max explosion radius
-        minSpread: 300, // min explosion radius
-        zIndex: 9999,
-        easing: "ease-out",
-        alphaStart: 1,
-        alphaEnd: 0,
-        scaleEnd: 0.3,
+      menuItem.onclick = () => {
+        selectedPokemonIndex = i;
+        updateDisplayedPokemon();
       };
 
-      const container = document.getElementById("particles");
-      container.innerHTML = "";
-
-      const color = getTypeColor(type);
-
-      const rect = pokemonImage.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-
-      const centerX = rect.left - containerRect.left + rect.width / 2;
-      const centerY = rect.top - containerRect.top + rect.height / 2;
-
-      for (let i = 0; i < PARTICLE_CONFIG.count; i++) {
-        const particle = document.createElement("div");
-
-        // base styling
-        particle.style.position = "absolute";
-        particle.style.width = `${PARTICLE_CONFIG.size}px`;
-        particle.style.height = `${PARTICLE_CONFIG.size}px`;
-        particle.style.background = color;
-        particle.style.left = `${centerX}px`;
-        particle.style.top = `${centerY}px`;
-        particle.style.pointerEvents = "none";
-        particle.style.zIndex = PARTICLE_CONFIG.zIndex;
-        particle.style.clipPath = "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)";
-
-        container.appendChild(particle);
-
-        // movement math
-        const angle = Math.random() * Math.PI * 2;
-        const distance =
-          Math.random() * (PARTICLE_CONFIG.spread - PARTICLE_CONFIG.minSpread) +
-          PARTICLE_CONFIG.minSpread;
-
-        const x = Math.cos(angle) * distance;
-        const y = Math.sin(angle) * distance;
-
-        particle.animate(
-          [
-            {
-              transform: "translate(0,0) scale(1)",
-              opacity: PARTICLE_CONFIG.alphaStart,
-            },
-            {
-              transform: `translate(${x}px, ${y}px) scale(${PARTICLE_CONFIG.scaleEnd})`,
-              opacity: PARTICLE_CONFIG.alphaEnd,
-            },
-          ],
-          {
-            duration: PARTICLE_CONFIG.lifetime,
-            easing: PARTICLE_CONFIG.easing,
-          },
-        );
-
-        setTimeout(() => particle.remove(), PARTICLE_CONFIG.lifetime);
-      }
+      teamMenu.appendChild(menuItem);
     }
-  </script>
+  }
+
+  // ─────────────────────────────
+  // CAMERA + FACE TRACKING
+  // ─────────────────────────────
+  const faceDetection = new window.FaceDetection({
+    locateFile: (file) =>
+      `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`,
+  });
+
+  faceDetection.setOptions({
+    model: "short",
+    minDetectionConfidence: 0.5,
+  });
+
+  faceDetection.onResults(({ detections }) => {
+    if (!detections.length) return;
+
+    const face = detections[0].boundingBox;
+    const videoRect = videoElement.getBoundingClientRect();
+
+    // ─────────────────────────────
+    // CONVERT TO PIXELS (stable AR space)
+    // ─────────────────────────────
+    const faceCenterX = face.xCenter * videoRect.width;
+    const faceCenterY = face.yCenter * videoRect.height;
+
+    const faceWidth = face.width * videoRect.width;
+    const faceHeight = face.height * videoRect.height;
+
+    // ─────────────────────────────
+    // OFFSETS (relative AR positioning)
+    // ─────────────────────────────
+    const sideOffset = faceWidth * 0.8;
+    const eyeLevelOffset = faceHeight * 0.5;
+    const aboveHeadOffset = faceHeight * 1.6;
+
+    // UI buttons
+    positionLeftButton.style.left = `${faceCenterX - sideOffset}px`;
+    positionLeftButton.style.top = `${faceCenterY + eyeLevelOffset}px`;
+
+    positionRightButton.style.left = `${faceCenterX + sideOffset}px`;
+    positionRightButton.style.top = `${faceCenterY + eyeLevelOffset}px`;
+
+    positionTopButton.style.left = `${faceCenterX}px`;
+    positionTopButton.style.top = `${faceCenterY - aboveHeadOffset}px`;
+
+    // ─────────────────────────────
+    // POKÉMON POSITION
+    // ─────────────────────────────
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (selectedPosition === "left") {
+      offsetX = -sideOffset;
+      offsetY = eyeLevelOffset;
+    }
+
+    if (selectedPosition === "right") {
+      offsetX = sideOffset;
+      offsetY = eyeLevelOffset;
+    }
+
+    if (selectedPosition === "top") {
+      offsetX = 0;
+      offsetY = -aboveHeadOffset;
+    }
+
+    // ─────────────────────────────
+    // Responsive Scaling
+    // ─────────────────────────────
+    const baseSize = videoRect.width * 0.18; // screen-based baseline
+    const faceInfluence = faceWidth * 0.2;   // subtle face influence only
+
+    const rawSize = baseSize + faceInfluence;
+
+    const maxSize = videoRect.width * 0.35;
+    const minSize = 48;
+
+    const size = Math.min(Math.max(rawSize, minSize), maxSize);
+
+    pokemonImage.style.width = `${size}px`;
+
+    // ─────────────────────────────
+    // APPLY POSITION
+    // ─────────────────────────────
+    pokemonImage.style.left = `${faceCenterX + offsetX}px`;
+    pokemonImage.style.top = `${faceCenterY + offsetY}px`;
+  });
+
+  // ─────────────────────────────
+  // START CAMERA
+  // ─────────────────────────────
+  startCameraButton.onclick = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+    });
+
+    videoElement.srcObject = stream;
+    await videoElement.play();
+
+    const camera = new window.Camera(videoElement, {
+      onFrame: async () => faceDetection.send({ image: videoElement }),
+    });
+
+    camera.start();
+
+    startCameraButton.style.display = "none";
+    document.querySelector(".overlay").classList.add("ar-active");
+
+    updateDisplayedPokemon();
+    renderTeamMenu();
+  };
+
+  // ─────────────────────────────
+  // PARTICLES
+  // ─────────────────────────────
+  function getTypeColor(type) {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(`--color-${type}`)
+      .trim();
+
+    return value || "#ff0000";
+  }
+
+  function triggerParticles(type) {
+    const PARTICLE_CONFIG = {
+      count: 50,
+      size: 100,
+      lifetime: 500,
+      spread: 600,
+      minSpread: 300,
+      zIndex: 9999,
+      easing: "ease-out",
+      alphaStart: 1,
+      alphaEnd: 0,
+      scaleEnd: 0.3,
+    };
+
+    const container = document.getElementById("particles");
+    container.innerHTML = "";
+
+    const color = getTypeColor(type);
+
+    const rect = pokemonImage.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    const centerX = rect.left - containerRect.left + rect.width / 2;
+    const centerY = rect.top - containerRect.top + rect.height / 2;
+
+    for (let i = 0; i < PARTICLE_CONFIG.count; i++) {
+      const particle = document.createElement("div");
+
+      particle.style.position = "absolute";
+      particle.style.width = `${PARTICLE_CONFIG.size}px`;
+      particle.style.height = `${PARTICLE_CONFIG.size}px`;
+      particle.style.background = color;
+      particle.style.left = `${centerX}px`;
+      particle.style.top = `${centerY}px`;
+      particle.style.pointerEvents = "none";
+      particle.style.zIndex = PARTICLE_CONFIG.zIndex;
+      particle.style.clipPath =
+        "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)";
+
+      container.appendChild(particle);
+
+      const angle = Math.random() * Math.PI * 2;
+      const distance =
+        Math.random() *
+          (PARTICLE_CONFIG.spread - PARTICLE_CONFIG.minSpread) +
+        PARTICLE_CONFIG.minSpread;
+
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+
+      particle.animate(
+        [
+          { transform: "translate(0,0) scale(1)", opacity: 1 },
+          {
+            transform: `translate(${x}px, ${y}px) scale(${PARTICLE_CONFIG.scaleEnd})`,
+            opacity: 0,
+          },
+        ],
+        {
+          duration: PARTICLE_CONFIG.lifetime,
+          easing: PARTICLE_CONFIG.easing,
+        }
+      );
+
+      setTimeout(() => particle.remove(), PARTICLE_CONFIG.lifetime);
+    }
+  }
+</script>
 
   <style>
     h1 {
@@ -339,6 +344,8 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
     .overlay {
       position: absolute;
+      width: 100%;
+      height: 100%;
       inset: 0;
 
       .location-btn {
@@ -347,38 +354,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         padding: 7rem;
         opacity: 0;
       }
-    }
-
-    #pokemon {
-      position: absolute;
-      width: 250px;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 5;
-      transition:
-        left 0.1s linear,
-        top 0.1s linear;
-    }
-
-    .team-menu {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-
-      z-index: 20;
-    }
-
-    .team-item {
-      background: #aae2f47c;
-      border: 3px solid var(--detail-container-border);
-      border-radius: 50%;
-      position: relative;
     }
 
     #start-camera {
@@ -395,47 +370,47 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       font-size: 2rem;
     }
 
-    .team-toggle {
-      aspect-ratio: 1;
-      width: 5rem;
-      position: relative;
-      margin: 1rem;
-      border-radius: 50%;
-      border: none;
-
-      div:before {
-        content: "";
-        position: absolute;
-        height: 50%;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: red;
-        border-radius: 50px 50px 0 0;
-      }
-
-      div:after {
-        content: "";
-        position: absolute;
-        height: 30%;
-        aspect-ratio: 1;
-        background: white;
-        border: 2px solid black;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-      }
+    #pokemon {
+      position: absolute;
+      width: 250px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      transition:
+        left 0.1s linear,
+        top 0.1s linear;
     }
 
-    .team-toggle.active {
-      div:before {
-        transform: translateY(-20%) scaleY(0.9);
-        box-shadow: 0 10px 0 gray;
-      }
+    #team-menu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 20;
+      padding: 1rem;
+    }
 
-      div:after {
-        transform: translate(-50%, -70%) scaleY(0.9);
+    .team-item {
+      background: #aae2f47c;
+      border: 3px solid var(--detail-container-border);
+      border-radius: 50%;
+      aspect-ratio: 1 / 1;
+
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
     }
   </style>
