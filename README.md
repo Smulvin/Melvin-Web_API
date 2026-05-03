@@ -306,7 +306,7 @@ Waar ik de vakantie aan wil werken:
 - Particle system voor AR effect
 - Max width op team sidepanel
 - Manier om naar volgende of vorige te gaan in de pokedex
-- Geen alert gebruiken (bijvoorbeeld wanneer team vol)
+- Geen alert gebruiken (bijvoorbeeld wanneer team vol)  
 - Duidelijk maken dat pokemon in je team gaat.
 - AR pokemon schalen aan de hand van schermformaat, responsive
 - Responsive van Detailpagina
