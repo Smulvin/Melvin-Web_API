@@ -14,9 +14,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       <img id="pokemon" src="" />
       <div id="particles"></div>
 
-      <button id="team-toggle" class="team-toggle">
-        <div></div>
-      </button>
       <div id="team-menu" class="team-menu"></div>
       <template id="team-item-template">
         <div class="team-item">
@@ -51,7 +48,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
     const pokemonImage = $("pokemon");
 
-    const teamToggleButton = $("team-toggle");
     const teamMenu = $("team-menu");
     const teamItemTemplate = $("team-item-template");
 
@@ -61,7 +57,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
     let selectedPosition = "right";
     let selectedPokemonIndex = 0;
-    let isTeamMenuOpen = false;
 
     positionLeftButton.onclick = () => (selectedPosition = "left");
     positionRightButton.onclick = () => (selectedPosition = "right");
@@ -109,14 +104,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       triggerParticles(type);
     }
 
-    teamToggleButton.onclick = () => {
-      isTeamMenuOpen = !isTeamMenuOpen;
-
-      teamMenu.classList.toggle("open", isTeamMenuOpen);
-      teamToggleButton.classList.toggle("active", isTeamMenuOpen);
-
-      if (isTeamMenuOpen) renderTeamMenu();
-    };
 
     async function renderTeamMenu() {
       const validTeam = getValidTeam();
@@ -234,6 +221,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       document.querySelector(".overlay").classList.add("ar-active");
 
       updateDisplayedPokemon();
+      renderTeamMenu();
     };
 
     // ─────────────────────────────
@@ -258,10 +246,10 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       // ─────────────────────────────
       const PARTICLE_CONFIG = {
         count: 50, // how many particles
-        size: 30, // px
-        lifetime: 600, // ms (must match animation + cleanup)
-        spread: 300, // max explosion radius
-        minSpread: 100, // min explosion radius
+        size: 100, // px
+        lifetime: 500, // ms (must match animation + cleanup)
+        spread: 600, // max explosion radius
+        minSpread: 300, // min explosion radius
         zIndex: 9999,
         easing: "ease-out",
         alphaStart: 1,
@@ -373,30 +361,24 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         top 0.1s linear;
     }
 
-    .team-toggle,
-    .team-menu {
-      display: none;
-    }
-
-    .overlay.ar-active .team-toggle {
-      display: block;
-    }
-
     .team-menu {
       position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+
+      display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.75rem;
+
       z-index: 20;
     }
 
-    .team-menu.open {
-      display: flex;
-    }
-
     .team-item {
-      background: var(--detail-container-bg);
+      background: #aae2f47c;
       border: 3px solid var(--detail-container-border);
       border-radius: 50%;
+      position: relative;
     }
 
     #start-camera {
