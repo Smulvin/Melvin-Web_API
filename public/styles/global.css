@@ -53,19 +53,20 @@
     padding: 0;
 }
 
-button, a {
-    cursor: pointer;
-}
-
 body {
     background: var(--color-background);
     font-family: var(--font-jost);
+
 }
 
 h1 {
     text-align: center;
     color: white;
     margin: 5rem 0 2rem 0;
+}
+
+button, a {
+    cursor: pointer;
 }
 
 .types {
