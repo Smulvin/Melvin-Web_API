@@ -317,12 +317,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
   </script>
 
   <style>
-    h1 {
-      text-align: center;
-      color: white;
-      margin: 5rem 0 2rem 0;
-    }
-
     .camera-box {
       position: relative;
       width: 80%;
@@ -340,8 +334,6 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
     .overlay {
       position: absolute;
-      width: 100%;
-      height: 100%;
       inset: 0;
 
       .location-btn {
@@ -380,11 +372,9 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
     #team-menu {
       position: absolute;
-      top: 0;
-      left: 0;
       height: 100%;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       flex-direction: column;
       gap: 0.5rem;
       z-index: 20;

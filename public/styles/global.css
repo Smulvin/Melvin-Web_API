@@ -62,6 +62,12 @@ body {
     font-family: var(--font-jost);
 }
 
+h1 {
+    text-align: center;
+    color: white;
+    margin: 5rem 0 2rem 0;
+}
+
 .types {
     display: flex;
     justify-content: center;
@@ -114,7 +120,3 @@ Prompt: Could you give me different styling for each typing? So that the backgro
 .type-dark { background: var(--color-dark); color: #fff; }
 .type-steel { background: var(--color-steel); color: #333; }
 .type-fairy { background: var(--color-fairy); color: #fff; }
-
-.move-physical { background: var(--color-move-physical-bg); color: var(--color-move-physical-text); }
-.move-special { background: var(--color-move-special-bg); color: var(--color-move-special-text); }
-.move-status { background: var(--color-move-status-bg); color: var(--color-move-status-text); }
