@@ -1,7 +1,7 @@
 ---
 // @ts-nocheck
 import DefaultLayout from "../../layouts/DefaultLayout.astro";
-import { POKEMON_URL } from "../shared.js";
+import { POKEMON_URL } from "../shared.ts";
 
 // Static paths
 export async function getStaticPaths() {
@@ -48,13 +48,16 @@ function extractEvolutions(chain) {
   return result;
 }
 const evolutionData = extractEvolutions(evoData.chain);
+
+// Makes title of the page Capitalized
+const capitalizedName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 ---
 
-<DefaultLayout title={pokemon.name}>
+<DefaultLayout title={capitalizedName}>
   <div class="pokemon-info">
     <div class="detail-top">
       <div class="detail-name container">
-        <h1>{pokemon.name}</h1>
+        <h1>{capitalizedName}</h1>
         <p>#{pokemon.id}</p>
       </div>
       <div class="detail-types container">
@@ -72,7 +75,8 @@ const evolutionData = extractEvolutions(evoData.chain);
         <div class="detail-image">
           <button
             class="container"
-            onClick={() => new Audio(pokemon.cries?.latest).play()}
+            id="play-cry"
+            data-cry={pokemon.cries?.latest}
           >
             <img src={pokemon.sprites.front_default} alt={pokemon.name} />
           </button>
@@ -118,6 +122,21 @@ const evolutionData = extractEvolutions(evoData.chain);
     </div>
   </div>
 </DefaultLayout>
+
+<script>
+  // @ts-nocheck
+  const cryBtn = document.getElementById("play-cry");
+
+  cryBtn.addEventListener("click", () => {
+    const cry = cryBtn.dataset.cry;
+
+    if (!cry) return;
+
+    const audio = new Audio(cry);
+    audio.volume = 0.2;
+    audio.play();
+  });
+</script>
 
 <style>
   /* Voorbeeld styling: https://www.instagram.com/reel/DXWxnvOjKeJ/?igsh=bW9kdzFqMjRlMnR5 */
@@ -210,7 +229,6 @@ const evolutionData = extractEvolutions(evoData.chain);
 
     h1 {
       order: 2;
-      text-transform: capitalize;
       font-size: inherit;
     }
   }

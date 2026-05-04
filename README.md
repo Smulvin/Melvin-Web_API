@@ -317,6 +317,7 @@ Styling van team in AR aangepast, knop weggehaald + responsive
 Pokemon in AR scalen adhv schermformaat
 Detail pagina meer responsive
 Geen alert meer, maar een popover
+Geluid van Detail gefixt en geluid toegevoegd aan AR
 
 
 ### Hulp van ChatGPT
