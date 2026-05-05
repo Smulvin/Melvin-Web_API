@@ -1,0 +1,110 @@
+---
+
+---
+
+<div>
+    <!-- Bron: https://www.youtube.com/watch?v=6xKWiCMKKJg&list=RD6xKWiCMKKJg&start_radio=1 -->
+    <audio id="ashSound" src="/SFX/IWannaBe.mp3"></audio>
+
+    <!-- Bron: https://www.youtube.com/watch?v=WSGV_n6H1n0 -->
+    <audio id="pikachuSound" src="/SFX/Pikachu.mp3"></audio>
+
+    <!-- Bron: https://www.youtube.com/shorts/fZYiSYH4kLQ -->
+    <audio id="buttonSound" src="/SFX/Button.mp3"></audio>
+
+    <!-- Bron: https://www.youtube.com/watch?v=Z04G8MsHv_U -->
+    <audio id="addSound" src="/SFX/Catch.mp3"></audio>
+    <audio id="removeSound" src="/SFX/RunAway.mp3"></audio>
+
+    <!-- Bron: https://www.myinstants.com/en/instant/pc-sound-64367/ -->
+    <audio id="detail-sfx" src="/SFX/PC.mp3" preload="auto"></audio>
+</div>
+
+<script>
+    // @ts-nocheck
+
+    // I wanna be the very best, like no one ever was!
+    const audio = document.getElementById("ashSound");
+    const Ashsequence = ["a", "s", "h"];
+    let currentIndex = 0;
+
+    document.addEventListener("keydown", (e) => {
+        const key = e.key.toLowerCase();
+
+        if (key === Ashsequence[currentIndex]) {
+            currentIndex++;
+
+            if (currentIndex === Ashsequence.length) {
+                audio.currentTime = 0;
+                audio.volume = 0.2;
+                audio.play();
+                currentIndex = 0;
+            }
+        } else {
+            currentIndex = 0;
+        }
+    });
+
+    // Pikachu
+    const pikachuSound = document.getElementById("pikachuSound");
+    const pikachuSequence = ["c", "l", "e", "f", "a", "i", "r", "y"];
+    let pikachuIndex = 0;
+
+    document.addEventListener("keydown", (e) => {
+        const key = e.key.toLowerCase();
+
+        if (key === pikachuSequence[pikachuIndex]) {
+            pikachuIndex++;
+
+            if (pikachuIndex === pikachuSequence.length) {
+                pikachuSound.currentTime = 0;
+                pikachuSound.volume = 0.2;
+                pikachuSound.play();
+                pikachuIndex = 0;
+            }
+        } else {
+            pikachuIndex = 0;
+        }
+    });
+
+
+    // Button SFX
+    const sound = document.getElementById("buttonSound");
+    const buttons = document.querySelectorAll(".buttonSFX");
+
+    buttons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+        const shouldWait = btn.classList.contains("wait-for-sfx");
+
+        if (shouldWait && btn.tagName === "A" && btn.href) {
+            e.preventDefault();
+
+            sound.currentTime = 0;
+            sound.play();
+
+            const target = btn.href;
+
+            sound.addEventListener("ended", function handler() {
+            sound.removeEventListener("ended", handler);
+            window.location.href = target;
+            });
+        } else {
+            sound.currentTime = 0;
+            sound.play();
+        }
+        });
+    });
+
+
+    // Remove Pokemon
+    const removeSound = document.getElementById("removeSound");
+
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".remove-btn");
+        if (!btn) return;
+
+        removeSound.currentTime = 0;
+        removeSound.volume = 0.1;
+        removeSound.play();
+    });
+</script>

@@ -21,11 +21,13 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         </button>
       </template>
 
+      <audio id="ar-music" src="/SFX/ARMusic.mp3" loop preload="auto"></audio>
+
       <button class="location-btn" id="pos-left">Left</button>
       <button class="location-btn" id="pos-right">Right</button>
       <button class="location-btn" id="pos-top">Top</button>
 
-      <button id="start-camera">Start Camera</button>
+      <button id="start-camera" class="buttonSFX">Start Camera</button>
     </div>
   </div>
 
@@ -104,7 +106,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
       if (cry) {
         const audio = new Audio(cry);
-        audio.volume = 0.2;
+        audio.volume = 0.1;
         audio.play().catch(() => {});
       }
     }
@@ -231,6 +233,14 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
       startCameraButton.style.display = "none";
       document.querySelector(".overlay").classList.add("ar-active");
+
+      const music = document.getElementById("ar-music");
+      if (music) {
+        music.volume = 0.05;
+        music.currentTime = 0;
+
+        music.play();
+      }
 
       updateDisplayedPokemon();
       renderTeamMenu();

@@ -43,6 +43,13 @@ try {
 
           if (success) {
             animateAdd(event);
+
+            const addSound = document.getElementById("addSound");
+            if (addSound) {
+              addSound.currentTime = 0;
+              addSound.volume = 0.1;
+              addSound.play();
+            }
           }
         `}
         >
@@ -72,7 +79,6 @@ try {
     const startX = rect.left + rect.width / 2 - 64;
     const startY = rect.top + rect.height / 2 - 64;
 
-    clone.style.position = "fixed";
     clone.style.left = `${startX}px`;
     clone.style.top = `${startY}px`;
 
@@ -201,6 +207,5 @@ try {
     aspect-ratio: 1;
     pointer-events: none;
     z-index: 9999;
-    background-size: cover;
   }
 </style>

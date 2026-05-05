@@ -136,6 +136,22 @@ const capitalizedName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slic
     audio.volume = 0.2;
     audio.play();
   });
+
+  const audio = document.getElementById("detail-sfx");
+
+  window.addEventListener("DOMContentLoaded", () => {
+
+    audio.volume = 0.2;
+
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        // Autoplay blocked — safe fail
+        console.log("SFX blocked by browser:", err);
+      });
+    }
+  });
 </script>
 
 <style>
