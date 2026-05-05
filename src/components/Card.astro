@@ -44,6 +44,7 @@ try {
           if (success) {
             animateAdd(event);
 
+            // SFX
             const addSound = document.getElementById("addSound");
             if (addSound) {
               addSound.currentTime = 0;
@@ -99,7 +100,6 @@ try {
       const endX = window.innerWidth + 100;
       const endY = window.innerHeight / 2 - 64;
 
-      // IMPORTANT: force reflow before switching transition
       clone.getBoundingClientRect();
 
       clone.style.transition = "all 0.7s ease";
@@ -124,16 +124,16 @@ try {
   .card {
     max-width: 200px;
     background:
-        linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
-        linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
-        linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
+      linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
+      linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
+      linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
     border: 5px solid var(--detail-container-border);
     border-radius: 1.6rem;
     padding: 1rem 0;
     color: black;
     text-decoration: none;
     position: relative;
-    
+
     img {
       aspect-ratio: 1;
       width: 90%;

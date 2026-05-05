@@ -67,34 +67,32 @@
         }
     });
 
-
     // Button SFX
     const sound = document.getElementById("buttonSound");
     const buttons = document.querySelectorAll(".buttonSFX");
 
     buttons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
-        const shouldWait = btn.classList.contains("wait-for-sfx");
+            const shouldWait = btn.classList.contains("wait-for-sfx");
 
-        if (shouldWait && btn.tagName === "A" && btn.href) {
-            e.preventDefault();
+            if (shouldWait && btn.tagName === "A" && btn.href) {
+                e.preventDefault();
 
-            sound.currentTime = 0;
-            sound.play();
+                sound.currentTime = 0;
+                sound.play();
 
-            const target = btn.href;
+                const target = btn.href;
 
-            sound.addEventListener("ended", function handler() {
-            sound.removeEventListener("ended", handler);
-            window.location.href = target;
-            });
-        } else {
-            sound.currentTime = 0;
-            sound.play();
-        }
+                sound.addEventListener("ended", function handler() {
+                    sound.removeEventListener("ended", handler);
+                    window.location.href = target;
+                });
+            } else {
+                sound.currentTime = 0;
+                sound.play();
+            }
         });
     });
-
 
     // Remove Pokemon
     const removeSound = document.getElementById("removeSound");
@@ -107,4 +105,10 @@
         removeSound.volume = 0.1;
         removeSound.play();
     });
+
+    // Code voor sfx van pokemon toevoegen staat in Card.astro, moest rekening houden met animatie
+
+    // Code voor sfx van Detail pagina staat in detailpagina zelf, omdat die automatisch moet starten bij laden van pagina
+
+    // Code voor muziek van AR staat in play.astro, moest gekoppeld aan de start button
 </script>

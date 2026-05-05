@@ -50,7 +50,8 @@ function extractEvolutions(chain) {
 const evolutionData = extractEvolutions(evoData.chain);
 
 // Makes title of the page Capitalized
-const capitalizedName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+const capitalizedName =
+  pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 ---
 
 <DefaultLayout title={capitalizedName}>
@@ -140,16 +141,12 @@ const capitalizedName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slic
   const audio = document.getElementById("detail-sfx");
 
   window.addEventListener("DOMContentLoaded", () => {
-
     audio.volume = 0.2;
 
     const playPromise = audio.play();
 
     if (playPromise !== undefined) {
-      playPromise.catch((err) => {
-        // Autoplay blocked — safe fail
-        console.log("SFX blocked by browser:", err);
-      });
+      playPromise.catch((err) => {});
     }
   });
 </script>
@@ -161,9 +158,9 @@ const capitalizedName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slic
     padding: 2rem 0;
     border: 5px solid var(--detail-container-border);
     background:
-        linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
-        linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
-        linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
+      linear-gradient(135deg, var(--detail-bg-light) 0 50%, transparent 50%),
+      linear-gradient(225deg, var(--detail-bg-normal) 0 50%, transparent 50%),
+      linear-gradient(315deg, var(--detail-bg-dark) 0 50%, transparent 50%);
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -212,7 +209,8 @@ const capitalizedName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slic
     gap: 1rem;
   }
 
-  .detail-name, .detail-types {
+  .detail-name,
+  .detail-types {
     flex: 1 1 200px;
     min-width: 400px;
 

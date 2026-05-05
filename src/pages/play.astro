@@ -21,6 +21,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
         </button>
       </template>
 
+      <!-- Bron: https://www.youtube.com/watch?v=rZ_cJdZJ8Mw&list=RDrZ_cJdZJ8Mw&start_radio=1 -->
       <audio id="ar-music" src="/SFX/ARMusic.mp3" loop preload="auto"></audio>
 
       <button class="location-btn" id="pos-left">Left</button>
@@ -234,6 +235,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       startCameraButton.style.display = "none";
       document.querySelector(".overlay").classList.add("ar-active");
 
+      // Background music
       const music = document.getElementById("ar-music");
       if (music) {
         music.volume = 0.05;

@@ -13,9 +13,7 @@ const pokemonList = data.results;
   <h1>Create your Pokémon Team!</h1>
 
   <div class="overview-grid">
-    {pokemonList.map((pokemon) => (
-      <Card pokemonName={pokemon.name} />
-    ))}
+    {pokemonList.map((pokemon) => <Card pokemonName={pokemon.name} />)}
   </div>
 </DefaultLayout>
 
