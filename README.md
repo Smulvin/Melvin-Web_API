@@ -321,6 +321,7 @@ Geluid van Detail gefixt en geluid toegevoegd aan AR
 Geprobeerd meer DRY te maken door meer op te slaan in localstorage, alles brak en kreeg het niet werkend. Veiliger om het te laten zoals het nu is, werkend
 Geen overige ruimte onder de footer wanneer scherm te smal
 easter eggs toevoegen (sfx)
+footer gat
 
 
 ### Hulp van ChatGPT
