@@ -18,6 +18,9 @@
 
     <!-- Bron: https://www.myinstants.com/en/instant/pc-sound-64367/ -->
     <audio id="detail-sfx" src="/SFX/PC.mp3" preload="auto"></audio>
+
+    <!-- Bron: https://www.youtube.com/watch?v=xMk8wuw7nek -->
+    <audio id="rapSound" src="/SFX/Rap.mp3"></audio>
 </div>
 
 <script>
@@ -66,6 +69,29 @@
             pikachuIndex = 0;
         }
     });
+
+    // Rap
+    const rapSFX = document.getElementById("rapSound");
+    const rapSequence = ["r", "a", "p"];
+    let rapIndex = 0;
+
+    document.addEventListener("keydown", (e) => {
+        const key = e.key.toLowerCase();
+
+        if (key === rapSequence[rapIndex]) {
+            rapIndex++;
+
+            if (rapIndex === rapSequence.length) {
+                rapSFX.currentTime = 0;
+                rapSFX.volume = 0.2;
+                rapSFX.play();
+                rapIndex = 0;
+            }
+        } else {
+            rapIndex = 0;
+        }
+    });
+
 
     // Button SFX
     const sound = document.getElementById("buttonSound");

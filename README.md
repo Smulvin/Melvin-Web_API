@@ -441,7 +441,45 @@ function triggerParticles(type) {
 
 ## Week 5 
 
-### Dag 8 6 - 5 - 2026
-Meerdere typings in particles system
+### Dag 8: Woensdag 6 - 5 - 2026
+Vandaag heb ik vooral gefocust op documentatie en een paar kleine dingetjes. Zo had ik bij de particles eerst dat hij alleen de eerste typing van een pokemon gebruikte voor de kleur. Later leek het me toch leuker om beide typings te gebruiken als de pokemon er meerdere had. Dit was gelukkig makkelijk te regelen. Ik had ook nog een ander idee om iets met de pokemon rap te doen. Iets in de vorm dat het bijvoorbeeld naar de pokemon op de overview zou gaan of naar die pokemon zijn detailpagina zodra die aan de beurt was in het nummer. Ik realiseerde me alleen al voordat ik begon met coderen dat het timen daarvan te lang zou duren, dus heb ik het geowon een easter egg gemaakt als je "rap" typt.
 
 <img src="Assets/README_imgs/Dag8_MultipleTypingParticles.png" alt="Alle typings worden nu gebruikt voor de kleur van de particles">
+
+### Reflectie
+Ik ben zeer tevreden met mijn website. Het was leuk om aan te werken en had er ook altijd motivatie voor. Door die motivatie heb ik ook in de meivakantie nog wel doorgewerkt aan de opdracht. Ik vond het leuk hoeveel vrijheid ik had qua wat ik mocht maken qua thema en welke technieken ik ging gebruiken. Het was wel soms lastig om met AR te werken, maar ik ben zeer tevreden met het resultaat. Als ik meer tijd had, had ik de website graag nog beter en meer DRY gemaakt. Zo had ik bijvoorbeeld nog skeleton loading kunnen toevoegen, meer informatie op een detailpagina, of meer functionalteiten in de AR zoals het plaatsen van meerdere pokémon. Maar zelfs zonder die extra dingen ben ik nog steeds zeer blij met mijn website.
+
+In het begin keek ik een beetje tegen werken met AR op, vooral omdat ik het nog nooit eerder had gedaan en had verwacht dat het echt heel moeilijk zou zijn. Maar door een kleine proof of concept hulp van ChatGPT, kon ik daarna er zelf veel verder mee werken.
+
+Het toevoegen van SFX en muziek vindt ik altijd een leuk gedeelte bij het maken van een website, in dit geval zorgde de SFX er meteen voor dat het meer de vibe van pokemon kreeg en meer voelde als een game. De muziek in de AR scene laat het ook bijna meer interactief lijken. Ik had graag nog wel meer met de AR functie willen doen als het gaat om interactie. Want op het moment kan je de pokemon alleen op je zelf plaatsen. Dit lag helaas ook aan de limitaties vanuit de API van wat er wel en niet gegeven werd.
+
+Al met al ben ik dus zeer blij met mijn website en zou er misschien nog wel meer weken aan verder kunnen werken, want er is nog wel nog veel aan toe te voegen. Maar een website zoals deze kan bijna nooit af zijn.
+
+## Complete bronnenlijst  
+<strong>API</strong>
+- https://pokeapi.co/
+
+<strong>Informatie</strong>
+- https://ar-js-org.github.io/AR.js-Docs/
+- https://stackblitz.com/edit/pokemon-api?file=index.js
+- https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API
+
+<strong>Libraries</strong>
+- https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js
+- https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js
+
+<strong>SFX</strong>
+- https://www.youtube.com/watch?v=6xKWiCMKKJg&list=RD6xKWiCMKKJg&start_radio=1
+- https://www.youtube.com/watch?v=WSGV_n6H1n0
+- https://www.youtube.com/shorts/fZYiSYH4kLQ
+- https://www.youtube.com/watch?v=Z04G8MsHv_U
+- https://www.myinstants.com/en/instant/pc-sound-64367/
+- https://www.youtube.com/watch?v=rZ_cJdZJ8Mw&list=RDrZ_cJdZJ8Mw&start_radio=1
+- https://www.youtube.com/watch?v=xMk8wuw7nek;
+
+<strong>Overig</strong>
+- Inspiratie: https://www.instagram.com/reel/DXWxnvOjKeJ/?igsh=bW9kdzFqMjRlMnR5
+- Font: https://fonts.google.com/specimen/Jost
+- Font Icons: https://fontawesome.com/
+- Favicon: https://commons.wikimedia.org/wiki/File:Pok%C3%A9_Ball_icon.svg
+- ChatGPT op verschillende plekken, vermeld in code en README
