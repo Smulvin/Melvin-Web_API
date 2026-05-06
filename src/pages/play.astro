@@ -79,13 +79,13 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
         return {
           sprite: data.sprites.front_default,
-          type: data.types[0].type.name,
+          types: data.types.map(t => t.type.name),
           cry: data.cries?.latest,
         };
       } catch {
         return {
           sprite: pokemon.image,
-          type: "normal",
+          types: "normal",
           cry: null,
         };
       }
@@ -97,13 +97,13 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
       selectedPokemonIndex %= validTeam.length;
 
-      const { sprite, type, cry } = await fetchPokemonData(
+      const { sprite, types, cry } = await fetchPokemonData(
         validTeam[selectedPokemonIndex],
       );
 
       pokemonImage.src = sprite;
 
-      triggerParticles(type);
+      triggerParticles(types);
 
       if (cry) {
         const audio = new Audio(cry);
@@ -262,14 +262,15 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       return value || "#ff0000";
     }
 
-    function triggerParticles(type) {
+    function triggerParticles(types) {
       const videoRect = videoElement.getBoundingClientRect();
+
       const PARTICLE_CONFIG = {
         count: 50,
         size: Math.max(20, videoRect.width * 0.06),
         lifetime: 500,
-        spread: 600,
-        minSpread: 300,
+        spread: 400,
+        minSpread: 250,
         zIndex: 9999,
         easing: "ease-out",
         alphaStart: 1,
@@ -278,9 +279,13 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
       };
 
       const container = document.getElementById("particles");
-      container.innerHTML = ""; // reset
+      container.innerHTML = "";
 
-      const color = getTypeColor(type);
+      // Always treat as array
+      const typeArray = Array.isArray(types) ? types : [types];
+
+      // Get colors for all types
+      const colors = typeArray.map(t => getTypeColor(t));
 
       const rect = pokemonImage.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
@@ -290,6 +295,9 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
 
       for (let i = 0; i < PARTICLE_CONFIG.count; i++) {
         const particle = document.createElement("div");
+
+        // 🎯 Pick color (balanced instead of random = nicer visually)
+        const color = colors[i % colors.length];
 
         particle.style.position = "absolute";
         particle.style.width = `${PARTICLE_CONFIG.size}px`;
@@ -321,7 +329,7 @@ import DefaultLayout from "../layouts/DefaultLayout.astro";
           {
             duration: PARTICLE_CONFIG.lifetime,
             easing: PARTICLE_CONFIG.easing,
-          },
+          }
         );
 
         setTimeout(() => particle.remove(), PARTICLE_CONFIG.lifetime);

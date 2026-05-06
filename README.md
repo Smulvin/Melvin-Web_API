@@ -227,8 +227,8 @@ Prompt: Right it just places the pokemon sprite on the video overlay, but it is 
 </DefaultLayout>
 ```
 
-<img src="Assets/README_imgs/Dag4_TeamPanel.png">
-<img src="Assets/README_imgs/Dag4_BeginAR.png">
+<img src="Assets/README_imgs/Dag4_TeamPanel.png" alt="Teampaneel dat rechts in je scherm kan in en uitklappen">
+<img src="Assets/README_imgs/Dag4_BeginAR.png" alt="Proof of concept van AR, weinig tot geen styling nog">
 
 #### Checkout met Dylan
 Ik wist dat Dylan vandaag ook thuis was, dus hadden we even aan elkaar laten zien wat we tot nu toe hebben. Onze projecten beginnen nu wel echt uiteen te lopen. Dylan heeft namelijk nu op een canvas al een gebied waarin je kan rond lopen en heeft al een speler met verschillende loop sprites.
@@ -236,13 +236,13 @@ Ik wist dat Dylan vandaag ook thuis was, dus hadden we even aan elkaar laten zie
 ### Dag 5: Donderdag 16 - 4 - 2025
 Vandaag werkte ik weer op school, had meteen aan Cyd gevraagd om te vragen of het goed was dat ik library gebruikte voor AR ipv een API. Ze had nog even meegekeken maar stelde voor om ook aan Jad te vragen. Die kwam tot dezelfde conclusies. Ik kan verder met waar ik nu mee bezig was. Daarna heb ik mijn font werkend gekregen door hem uberhaupt aan het project toe te voegen, heb ik icons toegevoegd voor + en - die ik van fontawesome heb gehaald. Heb ik wat styling gedaan op de AR pagina, en heb Cyd nog even om ideeën gevraagd. Zij stelde voor om het even uit te schetsen. Daarbuiten heb ik mijn home knop ook nog werkend gemaakt en heb ik geprobeerd met de AR te spelen door de pokemon kleiner te maken als het gezicht kleiner is en de afstand tot schouder kleiner te maken zodat ze niet zweven. Daar had ik een begin voor, maar nog niet compleet perfect werkend.
 
-<img src="Assets/README_imgs/Dag5_AR-Styling.png">
+<img src="Assets/README_imgs/Dag5_AR-Styling.png" alt="Styling van AR pagina. Knoppen onder de AR scene">
 
 ### Vrijdag 17 - 4 - 2026
 In de ochtend op de vrijdag heb ik nog even aan het project gezeten. Ik heb vandaag gewerkt aan de AR om ervoor te zorgen dat de buttons voor locatie nu op de AR staan, deze gaan dan ook mee met het gezicht. Maar toen kwam ook weer het probleem dat de pokemon in de lucht kan te zweven als het gezicht kleiner werd. Door wat berekeningen is dat nu beter geformateerd.
 
-<img src="Assets/README_imgs/ButtonsOpOverlay.png">
-<img src="Assets/README_imgs/ButtonsARScalable.png">
+<img src="Assets/README_imgs/ButtonsOpOverlay.png" alt="Locatie buttons in AR verwerkt">
+<img src="Assets/README_imgs/ButtonsARScalable.png" alt="Locatie buttons schalen mee met grootte van de gebruiker">
 
 ### Weekverslag
 Deze week ben ik ver op weg gekomen met het maken van de AR functie. Ik was eerst begonnen met het maken van een teamfunctie die werd opgeslagen met de localhost API, dit werkte snel omdat ik al eens eerder met die API had gewerkt. Daarna ging ik de AR werkend te krijgen met de WebXR API. Hier had ik eerst ChatGPT voor gevraagd om te kijken of het wel mogelijk was, aangezien het misschien niet ondersteund werd. In eerste instantie was dit ook de conclusie, dat het niet zou werken met de WebXR API, na wat onderzoek bleek het specifieker te zijn dat het alleen niet zou werken op de desktop versie. Het was me wel gelukt dezelfde functionaliteit te krijgen door gebruik van een normale camera en een face detection library. Cyd en Jad vonden dit allebei een goede oplossing. Hier heb ik toen nog een beetje mee gespeeld zodat je de pokémon op beide schouders en op je hoofd kon zetten en heb later gefixt dat in plaats van dat je dat doet met externe buttons dat het "knoppen" zijn die in de AR overlay al meteen zitten. Volgende week wil ik gaan werken aan het mooi maken van de AR en het zo spectaculair mogelijk maken. 
@@ -251,8 +251,8 @@ Deze week ben ik ver op weg gekomen met het maken van de AR functie. Ik was eers
 ### Dag 6: Woensdag 22 - 4 - 2026
 In de ochtend begonnen we met een workshop over het online zetten van je website. Ik liep hier tegen een paar dingetjes op, maar is uiteindelijk gelukt. Daarna wilde ik vooral focus leggen op de AR wat mooier en functioneler te maken. Op het moment had ik namelijk 2 knoppen onder mijn camera container staan, vond ik zelf niet heel mooi. Ik wilde die knoppen verwerken in de AR. Als eerste ben ik begonnen met het maken van de team knop. Normaal gesproken kon je namelijk alleen switchen door je team heen, maar dan was het altijd gewoon op volgorde, ik wilde meer vrijheid. Dus nu heb ik een knop die je team uitvouwt en dan kan je vrij kiezen welke pokemon je wilt zien in AR. Daarna wilde ik ook de start knop erin verwerken. Dit ging een stukje simpeler. Ik had zat nog even te twijfelen qua styling. Eerste wilde ik het doen in de kleuren van het pokemon logo. Dit vond ik er niet goed uit zien. Ik besloot de styling meer consistent te houden en heb het dus dezelfde kleuren gegeven als de play knop die in het team paneel staat. De rest van de dag was ik nog bezig met een beetje styling voor de team knop in de AR en was ik bezig om mijn code was leesbaarder te maken.
 
-<img src="Assets/README_imgs/Dag6_AR_Team.png">
-<img src="Assets/README_imgs/Dag6_AR_Start.png">
+<img src="Assets/README_imgs/Dag6_AR_Team.png" alt="Nieuwe knop om het team te openen in AR">
+<img src="Assets/README_imgs/Dag6_AR_Start.png" alt="Nieuwe groene styling van de start AR knop">
 
 #### Checkout met Dylan
 Dylan is vandaag begonnen met het online zetten van zijn website op render. Dit had een paar problemen omdat zijn canvas het niet deed. De rest van de dag is hij vooral bezig geweest met dingen repareren. Zo deed zijn localstorage het niet meer, en deed zijn randomizer moeilijk. Ook is hij bezig geweest met styling. Zo heeft hij zijn overview pagina een meer science thema gegeven en heeft hij zijn detailpagina in de stijl van een pokemon kaart gemaakt. Zelf wil ik morgne ook bezig met mijn detailpagina styling.
@@ -260,8 +260,8 @@ Dylan is vandaag begonnen met het online zetten van zijn website op render. Dit 
 ### Dag 7: Donderdag 23 - 4 - 2026
 Vandaag heb ik gewerkt aan de detailpagina van mijn pokémon. Ik liep een beetje vast met hoe ik dat wilde doen, maar kwam toen in de trein iets tegen op Instagram. De link naar die post staat hieronder. Daar heb ik veel inspiratie uit gehaald. In eerste instantie probeerde ik hem 1 op 1 na te maken, maar ik kwam al snel tegen responsive problemen aan. Cyd had aangeraden om iets te proberen met SVGs, maar de containers, maar daar kwam ik niet goed uit. Later was het gelukt met corner-shape bevel. Ik ben wel meer tevreden al over de nieuwe styling, maar ik denk dat er wel nog op te verbeteren is. Ik kan er later nog even naar kijken om wat punten op de i te zetten. Ik heb ook nog een klein beetje styling veranderd van de pokemon in je team tijdens AR. Ik heb voornamelijk de stijl overgenomen van de detailpagina.
 
-<img src="Assets/README_imgs/Dag7_EersteDetailPagina.png">
-<img src="Assets/README_imgs/Dag7_TweedeDetailPagina.png">
+<img src="Assets/README_imgs/Dag7_EersteDetailPagina.png" alt="Eerste versie van detailpagina, zo veel mogelijk voorbeeld proberen na te maken">
+<img src="Assets/README_imgs/Dag7_TweedeDetailPagina.png" alt="Tweede versie van de detailpagina die beter en makkelijker responsive is">
 https://www.instagram.com/reel/DXWxnvOjKeJ/?igsh=bW9kdzFqMjRlMnR5
 
 #### Checkout met Mila
@@ -293,35 +293,19 @@ Vandaag meteen gewerkt aan de borders fixen van de detail pagina zodat ze niet d
 
 Vandaag ben ik meteen aan verschillende dingen gaan werken, want ik had veel tijd voordat ik mijn andere gesprek had. Als eerste heb ik de border van de detailpagina gefixt zodat ze niet dubbel zijn en heb een clippath gebruikt voor de animatie zodat hij wat cleaner is. Om de groepering wat duidelijker te maken op de detailpagina heb ik voor nu de shiny aan de andere kant van de image gezet, dan lijkt hij minder bij de evolutions te horen. Op de overview pagina heb ik de titel veranderd zodat hij duidelijker is, heb ik de + en - icoontjes wat kleiner gemaakt en heb ik een nieuwe hover gemaakt. Dit idee had ik eerder al, maar ik wilde ook de overview pagina meer styling zoals de detailpagina. Dus hij moet waarschijnlijk nog anders.
 
-<img src="Assets/README_imgs/Meivakantie_NieuweHover.png">
+<img src="Assets/README_imgs/Meivakantie_NieuweHover.png" alt="Eerste nieuwe versie van de hover state">
 
 ## Meivakantie
-Waar ik de vakantie aan wil werken:
-- Skeleton loading
-- Overview pagina meer op detailpagina laten lijken
-- Meerdere pokemon in AR kunnen neerzetten
-- Teampaneel AR beter vormgeven
-- Betere hover voor overview pagina
-- Favicon
-- Particle system voor AR effect
-- Max width op team sidepanel
-- Manier om naar volgende of vorige te gaan in de pokedex
-- Geen alert gebruiken (bijvoorbeeld wanneer team vol)  
-- Duidelijk maken dat pokemon in je team gaat.
-- AR pokemon schalen aan de hand van schermformaat, responsive
-- Responsive van Detailpagina
-
 In de meivakantie heb ik aan meerdere dingen gewerkt, zo ben ik begonnen met een paar simpele dingetjes, zoals een favicon, de overviewpagina anders stylen met ook een betere hover, een max-width op het teampaneel. Maar ook heb ik gewerkt aan wat groter dingen. Zoals het maken van een particle system. Hier had ik wel even wat moeite mee namelijk en kwam er nooit zo uit zoals ik het wilde hebben. Ik heb het uiteindelijk aan AI gevraagd, en daarna gevraagd of hij het iets anders kon opbouwen zodat ik makkelijker kon spelen met de waardes. Later heb ik de particles nog sterretjes gemaakt in plaats van rondjes. Ook heb ik later in de vakantie nog gewerkt aan een animatie om duidelijker te maken dat je pokemon in je team gaat. Was ook weer even lastig, maar om het werkend te krijgen moest ik ook veel styling via javascript doen, wat niet fijn voelde.
 
-Styling van team in AR aangepast, knop weggehaald + responsive
-Pokemon in AR scalen adhv schermformaat
-Detail pagina meer responsive
-Geen alert meer, maar een popover
-Geluid van Detail gefixt en geluid toegevoegd aan AR
-Geprobeerd meer DRY te maken door meer op te slaan in localstorage, alles brak en kreeg het niet werkend. Veiliger om het te laten zoals het nu is, werkend
-Geen overige ruimte onder de footer wanneer scherm te smal
-easter eggs toevoegen (sfx)
-footer gat
+<img src="Assets/README_imgs/Meivakantie_NieuweOverview.png" alt="De nieuwe styling van de overview pagina, deze lijkt meer op de detailpagina en heeft een nieuwe hover">
+<img src="Assets/README_imgs/Meivakantie_ParticleSystem.png" alt="Particle system voor wanneer een pokemon in AR komt, gebruikt eerste typing van de pokemon als kleur">
+
+In de tweede periode van de meivakantie heb ik nog verder gewerkt aan verschillende onderdelen. Zo heb ik de styling van het team in AR veranderd, ik was namelijk nog niet tevreden over de knop om het team te openen, dus ik had besloten heb gewoon weg te halen en dat je team dan altijd gewoon te zien is. Dit help ook bij het responsive maken. Daarbij heb ik ook in AR gewerkt aan het zorgen dat de pokemon scaled aan de hand van het schermformaat. Zodat er op een telefoon formaat niet opeens een enorme pokemon op je schouder staat. Ik heb de detailpagina meer responsive gemaakt, hier had ik flink wat moeite mee, onder andere door de layout die ik had met corners die een bevel afronding hadden. Ik probeerde het eerst zonder media queries, maar het lukte helaas niet zonder. Ik heb de alert die ik had voor wanneer het team vol zat veranderd naar een simpele pop-over. Ik heb ervoor gezorgd dat zodra een pokemon in AR tevoorschijn komt dat je zijn geluid ook meteen hoort, dit was eerst ook nog kapot op de detailpagina. De footer aangepast zodat hij geen extra ruimte eronder meer heeft als het scherm te klein wordt, hij staat nu gewoon altijd onderin. En ik heb hem iets meer styling te geven door hem een inham te geven zodat hij meer lijkt op de onderkant van een pokeball. Voor de rest heb ik verschillende soundeffects toegevoegd. Vooral om de website wat meer als een game te laten voelen. Maar ook wat easter eggs. Je kan bijvoorbeeld "ash" of "clefairy" typen om een sfx te horen. Ik heb ook nog geprobeerd om mijn website meer DRY te maken door niet meerdere calls naar de API te maken, maar elke keer ging mijn website flink kapot. Was waarschijnlijk handiger om dit meteen te doen. Aan de andere kant haalt hij nu wel steeds alleen op wat hij nodig heeft. Dus dat heeft misschien ook weer een pluspunt.
+
+<img src="Assets/README_imgs/Meivakantie_NieuwTeamAR.png" alt="Nieuwe styling van het team in AR, zonder extra knop om het team te openen">
+<img src="Assets/README_imgs/Meivakantie_FooterStyling.png" alt="Nieuwe footer styling van een inham zodat het meer op de onderkant van pokeball lijkt">
+
 
 
 ### Hulp van ChatGPT
@@ -455,3 +439,9 @@ function triggerParticles(type) {
 }
 ```
 
+## Week 5 
+
+### Dag 8 6 - 5 - 2026
+Meerdere typings in particles system
+
+<img src="Assets/README_imgs/Dag8_MultipleTypingParticles.png" alt="Alle typings worden nu gebruikt voor de kleur van de particles">
