@@ -8,6 +8,7 @@ export async function getStaticPaths() {
   const res = await fetch(POKEMON_URL);
   const data = await res.json();
 
+//Create paths for each Pokémon
   return data.results.map((pokemon) => ({
     params: { name: pokemon.name },
   }));
@@ -15,6 +16,7 @@ export async function getStaticPaths() {
 
 // Main Pokémon
 const { name } = Astro.params;
+// Fetch specific Pokémon data
 const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
 const pokemon = await res.json();
 
